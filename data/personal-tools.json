@@ -76,6 +76,15 @@
       "name": "通用工具",
       "sites": [
         {
+          "id": "image-editor",
+          "name": "图片编辑器",
+          "url": "/tools/image-editor",
+          "description": "读取图片时间与地理位置信息，并将可编辑文本写入图片。",
+          "tags": ["EXIF", "图片处理", "水印"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "text-compare",
           "name": "文本对比",
           "url": "/tools/text-compare",
