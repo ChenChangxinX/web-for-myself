@@ -1,65 +1,72 @@
-import Image from "next/image";
+import Link from "next/link";
+import { moduleList } from "@/lib/modules";
 
 export default function Home() {
+  const activeModules = moduleList.filter((item) => item.status === "active").length;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="space-y-10">
+      <section className="hero-panel rounded-3xl border border-black/10 p-8 shadow-sm md:p-10">
+        <p className="mb-3 inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-semibold tracking-[0.18em] text-sky-700">
+          CURATED HUB
+        </p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+          你的可扩展网站大全
+        </h1>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+          先从个人工具做一个小而强的版本，再逐步扩展到工作效率、娱乐创意、学习教育和社交互动模块。
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/category/personal-tools"
+            className="inline-flex items-center rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            进入个人工具
+          </Link>
+          <span className="inline-flex items-center rounded-full border border-slate-300 bg-white/70 px-4 py-2 text-sm text-slate-700">
+            已上线模块 {activeModules} / {moduleList.length}
+          </span>
         </div>
-      </main>
+      </section>
+
+      <section>
+        <div className="mb-4 flex items-end justify-between gap-3">
+          <h2 className="text-xl font-bold tracking-tight text-slate-900">模块导航</h2>
+          <p className="text-sm text-slate-500">点击卡片可进入模块页面</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {moduleList.map((module, index) => (
+            <article
+              key={module.slug}
+              className="module-card card-appear rounded-2xl border border-black/10 bg-white/92 p-5 shadow-sm"
+              style={{ animationDelay: `${index * 90}ms` }}
+            >
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h3 className="text-lg font-semibold text-slate-900">{module.name}</h3>
+                <span
+                  className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                    module.status === "active"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-amber-100 text-amber-800"
+                  }`}
+                >
+                  {module.status === "active" ? "已上线" : "即将上线"}
+                </span>
+              </div>
+
+              <p className="mb-4 text-sm leading-6 text-slate-600">{module.summary}</p>
+
+              <Link
+                href={`/category/${module.slug}`}
+                className="inline-flex text-sm font-semibold text-sky-700 hover:text-sky-800"
+              >
+                查看模块
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

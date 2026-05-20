@@ -1,0 +1,117 @@
+{
+  "slug": "personal-tools",
+  "title": "个人工具",
+  "description": "围绕日常记录、灵感收集、专注管理和个人效率的精选网站集合。",
+  "groups": [
+    {
+      "id": "notes-and-writing",
+      "name": "笔记与写作",
+      "sites": [
+        {
+          "id": "notion",
+          "name": "Notion",
+          "url": "https://www.notion.so/",
+          "description": "文档、数据库和知识管理一体化平台。",
+          "tags": ["笔记", "知识库", "协作"],
+          "icon": "https://www.notion.so/front-static/favicon.ico",
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "obsidian",
+          "name": "Obsidian",
+          "url": "https://obsidian.md/",
+          "description": "双链知识网络和本地 Markdown 笔记工具。",
+          "tags": ["Markdown", "知识管理"],
+          "icon": "https://obsidian.md/images/obsidian-logo-gradient.svg",
+          "featured": false,
+          "status": "active"
+        },
+        {
+          "id": "typora",
+          "name": "Typora",
+          "url": "https://typora.io/",
+          "description": "沉浸式 Markdown 写作体验。",
+          "tags": ["写作", "Markdown"],
+          "featured": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "focus-and-time",
+      "name": "专注与时间",
+      "sites": [
+        {
+          "id": "pomofocus",
+          "name": "Pomofocus",
+          "url": "https://pomofocus.io/",
+          "description": "在线番茄钟，支持任务清单和统计。",
+          "tags": ["番茄钟", "时间管理"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "clockify",
+          "name": "Clockify",
+          "url": "https://clockify.me/",
+          "description": "免费工时追踪和报表分析工具。",
+          "tags": ["时间追踪", "统计"],
+          "featured": false,
+          "status": "active"
+        },
+        {
+          "id": "toggl-track",
+          "name": "Toggl Track",
+          "url": "https://toggl.com/track/",
+          "description": "轻量时间记录和项目工时管理。",
+          "tags": ["时间管理", "项目"],
+          "featured": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "name": "通用工具",
+      "sites": [
+        {
+          "id": "tinypng",
+          "name": "TinyPNG",
+          "url": "https://tinypng.com/",
+          "description": "高质量图片压缩工具。",
+          "tags": ["图片处理", "压缩"],
+          "featured": false,
+          "status": "active"
+        },
+        {
+          "id": "ilovepdf",
+          "name": "iLovePDF",
+          "url": "https://www.ilovepdf.com/",
+          "description": "PDF 合并、拆分、转换等常用处理。",
+          "tags": ["PDF", "办公"],
+          "featured": false,
+          "status": "active"
+        },
+        {
+          "id": "remove-bg",
+          "name": "remove.bg",
+          "url": "https://www.remove.bg/",
+          "description": "快速 AI 抠图与背景移除。",
+          "tags": ["AI 工具", "图片处理"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "json-formatter",
+          "name": "JSON Formatter",
+          "url": "https://jsonformatter.org/",
+          "description": "JSON 格式化、校验和转换。",
+          "tags": ["开发辅助", "JSON"],
+          "featured": false,
+          "status": "active"
+        }
+      ]
+    }
+  ]
+}
