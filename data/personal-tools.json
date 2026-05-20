@@ -76,6 +76,15 @@
       "name": "通用工具",
       "sites": [
         {
+          "id": "image-to-text",
+          "name": "图片转文字",
+          "url": "/tools/image-to-text",
+          "description": "上传或粘贴本地图片，自动识别并复制图片中的文字。",
+          "tags": ["OCR", "图片处理", "文字提取"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "tinypng",
           "name": "TinyPNG",
           "url": "https://tinypng.com/",

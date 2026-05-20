@@ -5,9 +5,13 @@ const moduleDatasetMap: Record<string, unknown> = {
   "personal-tools": personalToolsData,
 };
 
-function isValidHttpUrl(input: unknown): input is string {
+function isValidSiteHref(input: unknown): input is string {
   if (typeof input !== "string") {
     return false;
+  }
+
+  if (input.startsWith("/")) {
+    return true;
   }
 
   try {
@@ -31,7 +35,7 @@ function isSiteItem(value: unknown): value is SiteItem {
     candidate.id.length > 0 &&
     typeof candidate.name === "string" &&
     candidate.name.length > 0 &&
-    isValidHttpUrl(candidate.url) &&
+    isValidSiteHref(candidate.url) &&
     typeof candidate.description === "string" &&
     Array.isArray(candidate.tags) &&
     candidate.tags.every((tag) => typeof tag === "string") &&

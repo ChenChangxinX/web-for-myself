@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { SiteItem } from "@/types/site";
 
 interface SiteCardProps {
@@ -5,6 +6,8 @@ interface SiteCardProps {
 }
 
 export function SiteCard({ site }: SiteCardProps) {
+  const isInternalHref = site.url.startsWith("/");
+
   return (
     <article className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="mb-3 flex items-start justify-between gap-4">
@@ -29,14 +32,21 @@ export function SiteCard({ site }: SiteCardProps) {
         ))}
       </ul>
 
-      <a
-        href={site.url}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center text-sm font-semibold text-sky-700 hover:text-sky-800"
-      >
-        访问网站
-      </a>
+      {isInternalHref ? (
+        <Link href={site.url} className="inline-flex items-center text-sm font-semibold text-sky-700 hover:text-sky-800">
+          打开工具
+        </Link>
+      ) : (
+        <a
+          href={site.url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center text-sm font-semibold text-sky-700 hover:text-sky-800"
+        >
+          访问网站
+        </a>
+      )}
     </article>
   );
 }
+
