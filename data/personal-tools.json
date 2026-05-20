@@ -76,6 +76,15 @@
       "name": "通用工具",
       "sites": [
         {
+          "id": "base64-tool",
+          "name": "Base64 编解码",
+          "url": "/tools/base64-tool",
+          "description": "支持文本与图片 Base64 编解码、在线预览、批量文件编码，以及 URL/Unicode 编解码。",
+          "tags": ["Base64", "编码转换", "开发辅助"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "color-picker",
           "name": "颜色选择器",
           "url": "/tools/color-picker",
