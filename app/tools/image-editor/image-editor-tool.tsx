@@ -3,14 +3,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import exifr from "exifr";
 
+/* eslint-disable @next/next/no-img-element */
+
 type OverlayPosition = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 interface MetadataState {
   capturedAt: string;
-  locationLabel: string;
-  latitude: string;
-  longitude: string;
+  locationText: string;
   cameraModel: string;
+}
+
+interface BatchItem {
+  id: string;
+  fileName: string;
+  sourceUrl: string;
+  outputUrl?: string;
+  status: "ready" | "skipped" | "error";
+  message: string;
+  metadata: MetadataState;
 }
 
 const FONT_OPTIONS = [
@@ -52,299 +62,346 @@ function drawRoundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, wi
 }
 
 export function ImageEditorTool() {
-  const [fileName, setFileName] = useState("");
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [metadata, setMetadata] = useState<MetadataState>({
-    capturedAt: "",
-    locationLabel: "",
-    latitude: "",
-    longitude: "",
-    cameraModel: "",
-  });
+  const [items, setItems] = useState<BatchItem[]>([]);
   const [showTime, setShowTime] = useState(true);
   const [showLocation, setShowLocation] = useState(true);
-  const [showCoords, setShowCoords] = useState(true);
   const [fontFamily, setFontFamily] = useState(FONT_OPTIONS[0].value);
   const [fontSize, setFontSize] = useState(30);
   const [fontColor, setFontColor] = useState("#f8fafc");
   const [fontWeight, setFontWeight] = useState<"normal" | "bold">("bold");
   const [position, setPosition] = useState<OverlayPosition>("bottom-left");
   const [padding, setPadding] = useState(18);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [status, setStatus] = useState("等待上传图片");
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const imageRef = useRef<HTMLImageElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const overlayLines = useMemo(() => {
-    const lines: string[] = [];
+  const resolveOverlayLines = useCallback(
+    (metadata: MetadataState) => {
+      const lines: string[] = [];
 
-    if (showTime && metadata.capturedAt.trim()) {
-      lines.push(`时间: ${metadata.capturedAt.trim()}`);
-    }
+      if (showTime && metadata.capturedAt.trim()) {
+        lines.push(`时间: ${metadata.capturedAt.trim()}`);
+      }
 
-    if (showLocation && metadata.locationLabel.trim()) {
-      lines.push(`位置: ${metadata.locationLabel.trim()}`);
-    }
+      if (showLocation && metadata.locationText.trim()) {
+        lines.push(`位置: ${metadata.locationText.trim()}`);
+      }
 
-    if (showCoords && (metadata.latitude.trim() || metadata.longitude.trim())) {
-      lines.push(`坐标: ${metadata.latitude.trim()} , ${metadata.longitude.trim()}`);
-    }
-
-    return lines;
-  }, [metadata, showCoords, showLocation, showTime]);
+      return lines;
+    },
+    [showLocation, showTime],
+  );
 
   useEffect(() => {
     return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
+      items.forEach((item) => {
+        URL.revokeObjectURL(item.sourceUrl);
+        if (item.outputUrl) {
+          URL.revokeObjectURL(item.outputUrl);
+        }
+      });
     };
-  }, [previewUrl]);
+  }, [items]);
+
+  const renderImageWithOverlay = useCallback(
+    async (sourceUrl: string, metadata: MetadataState) => {
+      const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = sourceUrl;
+      });
+
+      const lines = resolveOverlayLines(metadata);
+      if (!lines.length) {
+        return null;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        return null;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+
+      const lineHeight = Math.round(fontSize * 1.35);
+      const maxTextWidth = Math.max(...lines.map((line) => ctx.measureText(line).width));
+      const boxWidth = maxTextWidth + padding * 2;
+      const boxHeight = lineHeight * lines.length + padding * 2;
+
+      let x = padding;
+      let y = padding;
+
+      if (position === "top-right") {
+        x = canvas.width - boxWidth - padding;
+        y = padding;
+      }
+
+      if (position === "bottom-left") {
+        x = padding;
+        y = canvas.height - boxHeight - padding;
+      }
+
+      if (position === "bottom-right") {
+        x = canvas.width - boxWidth - padding;
+        y = canvas.height - boxHeight - padding;
+      }
+
+      ctx.fillStyle = "rgba(15, 23, 42, 0.58)";
+      drawRoundedRect(ctx, x, y, boxWidth, boxHeight, Math.max(12, Math.round(fontSize * 0.45)));
+      ctx.fill();
+
+      ctx.fillStyle = fontColor;
+      ctx.textBaseline = "top";
+      lines.forEach((line, index) => {
+        ctx.fillText(line, x + padding, y + padding + index * lineHeight);
+      });
+
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob((value) => resolve(value), "image/png");
+      });
+
+      if (!blob) {
+        return null;
+      }
+
+      return URL.createObjectURL(blob);
+    },
+    [fontColor, fontFamily, fontSize, fontWeight, padding, position, resolveOverlayLines],
+  );
+
+  const summary = useMemo(() => {
+    const ready = items.filter((item) => item.status === "ready").length;
+    const skipped = items.filter((item) => item.status === "skipped").length;
+    const failed = items.filter((item) => item.status === "error").length;
+
+    return { ready, skipped, failed, total: items.length };
+  }, [items]);
 
   async function parseMetadata(file: File) {
-    try {
-      const exif = await exifr.parse(file, true);
-      const capturedAt = formatDate(exif?.DateTimeOriginal ?? exif?.CreateDate ?? exif?.ModifyDate);
-      const latitude = formatCoord(exif?.latitude);
-      const longitude = formatCoord(exif?.longitude);
-      const cameraModel = [exif?.Make, exif?.Model].filter(Boolean).join(" ");
+    const exif = await exifr.parse(file, true);
+    const capturedAt = formatDate(exif?.DateTimeOriginal ?? exif?.CreateDate ?? exif?.ModifyDate);
+    const latitude = formatCoord(exif?.latitude);
+    const longitude = formatCoord(exif?.longitude);
+    const cameraModel = [exif?.Make, exif?.Model].filter(Boolean).join(" ");
+    const locationText = latitude && longitude ? `纬度 ${latitude} / 经度 ${longitude}` : "";
 
-      const locationLabel = latitude && longitude ? `纬度 ${latitude} / 经度 ${longitude}` : "";
-
-      setMetadata((current) => ({
-        ...current,
-        capturedAt,
-        locationLabel,
-        latitude,
-        longitude,
-        cameraModel,
-      }));
-      setStatus("已读取图片元数据");
-    } catch {
-      setStatus("未读取到 EXIF 元数据，可手动填写");
-      setMetadata((current) => ({ ...current, cameraModel: "" }));
-    }
+    return {
+      capturedAt,
+      locationText,
+      cameraModel,
+    } satisfies MetadataState;
   }
 
-  const renderCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
-    const image = imageRef.current;
-
-    if (!canvas || !image) {
+  async function processFiles(fileList: File[]) {
+    if (!fileList.length) {
       return;
     }
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return;
-    }
+    setIsProcessing(true);
+    setStatus(`开始处理 ${fileList.length} 张图片...`);
 
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-    if (!overlayLines.length) {
-      return;
-    }
-
-    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-    const lineHeight = Math.round(fontSize * 1.35);
-    const maxTextWidth = Math.max(...overlayLines.map((line) => ctx.measureText(line).width));
-    const boxWidth = maxTextWidth + padding * 2;
-    const boxHeight = lineHeight * overlayLines.length + padding * 2;
-
-    let x = padding;
-    let y = padding;
-
-    if (position === "top-right") {
-      x = canvas.width - boxWidth - padding;
-      y = padding;
-    }
-
-    if (position === "bottom-left") {
-      x = padding;
-      y = canvas.height - boxHeight - padding;
-    }
-
-    if (position === "bottom-right") {
-      x = canvas.width - boxWidth - padding;
-      y = canvas.height - boxHeight - padding;
-    }
-
-    ctx.fillStyle = "rgba(15, 23, 42, 0.58)";
-    drawRoundedRect(ctx, x, y, boxWidth, boxHeight, Math.max(12, Math.round(fontSize * 0.45)));
-    ctx.fill();
-
-    ctx.fillStyle = fontColor;
-    ctx.textBaseline = "top";
-    overlayLines.forEach((line, index) => {
-      ctx.fillText(line, x + padding, y + padding + index * lineHeight);
+    setItems((previous) => {
+      previous.forEach((item) => {
+        URL.revokeObjectURL(item.sourceUrl);
+        if (item.outputUrl) {
+          URL.revokeObjectURL(item.outputUrl);
+        }
+      });
+      return [];
     });
-  }, [fontColor, fontFamily, fontSize, fontWeight, overlayLines, padding, position]);
 
-  useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
+    const nextItems: BatchItem[] = [];
 
-    renderCanvas();
-  }, [isLoaded, renderCanvas]);
+    for (let index = 0; index < fileList.length; index += 1) {
+      const file = fileList[index];
 
-  async function loadFile(file: File) {
-    if (!file.type.startsWith("image/")) {
-      setStatus("请选择图片文件");
-      return;
-    }
-
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-    setFileName(file.name);
-    setStatus("正在加载图片...");
-
-    const image = new Image();
-    image.onload = () => {
-      imageRef.current = image;
-      setIsLoaded(true);
-      setStatus("图片加载完成");
-    };
-    image.onerror = () => {
-      setStatus("图片加载失败");
-      setIsLoaded(false);
-    };
-    image.src = objectUrl;
-
-    await parseMetadata(file);
-  }
-
-  function handleMetadataChange<K extends keyof MetadataState>(key: K, value: MetadataState[K]) {
-    setMetadata((current) => ({ ...current, [key]: value }));
-  }
-
-  function downloadImage() {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      return;
-    }
-
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        return;
+      if (!file.type.startsWith("image/")) {
+        continue;
       }
 
-      const downloadUrl = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      const baseName = fileName.replace(/\.[^.]+$/, "") || "image";
-      anchor.href = downloadUrl;
-      anchor.download = `${baseName}-edited.png`;
-      anchor.click();
-      URL.revokeObjectURL(downloadUrl);
-    }, "image/png");
+      const sourceUrl = URL.createObjectURL(file);
+
+      try {
+        const metadata = await parseMetadata(file);
+        const lines = resolveOverlayLines(metadata);
+
+        if (!lines.length) {
+          nextItems.push({
+            id: `${file.name}-${index}`,
+            fileName: file.name,
+            sourceUrl,
+            status: "skipped",
+            message: "未检测到时间或地理位置信息，已跳过",
+            metadata,
+          });
+          continue;
+        }
+
+        const outputUrl = await renderImageWithOverlay(sourceUrl, metadata);
+
+        if (!outputUrl) {
+          nextItems.push({
+            id: `${file.name}-${index}`,
+            fileName: file.name,
+            sourceUrl,
+            status: "error",
+            message: "渲染失败",
+            metadata,
+          });
+          continue;
+        }
+
+        nextItems.push({
+          id: `${file.name}-${index}`,
+          fileName: file.name,
+          sourceUrl,
+          outputUrl,
+          status: "ready",
+          message: "处理完成",
+          metadata,
+        });
+      } catch {
+        nextItems.push({
+          id: `${file.name}-${index}`,
+          fileName: file.name,
+          sourceUrl,
+          status: "error",
+          message: "读取 EXIF 失败",
+          metadata: {
+            capturedAt: "",
+            locationText: "",
+            cameraModel: "",
+          },
+        });
+      }
+    }
+
+    setItems(nextItems);
+    setIsProcessing(false);
+    setStatus(`处理完成：成功 ${nextItems.filter((item) => item.status === "ready").length}，跳过 ${nextItems.filter((item) => item.status === "skipped").length}`);
+  }
+
+  async function regenerateAllReadyItems() {
+    if (!items.length) {
+      return;
+    }
+
+    setIsProcessing(true);
+    setStatus("正在应用样式并重新生成...");
+
+    const regenerated = await Promise.all(
+      items.map(async (item) => {
+        if (item.outputUrl) {
+          URL.revokeObjectURL(item.outputUrl);
+        }
+
+        const lines = resolveOverlayLines(item.metadata);
+        if (!lines.length) {
+          return {
+            ...item,
+            outputUrl: undefined,
+            status: "skipped" as const,
+            message: "样式应用后无可写入信息，已跳过",
+          };
+        }
+
+        const outputUrl = await renderImageWithOverlay(item.sourceUrl, item.metadata);
+        if (!outputUrl) {
+          return {
+            ...item,
+            outputUrl: undefined,
+            status: "error" as const,
+            message: "重渲染失败",
+          };
+        }
+
+        return {
+          ...item,
+          outputUrl,
+          status: "ready" as const,
+          message: "处理完成",
+        };
+      }),
+    );
+
+    setItems(regenerated);
+    setIsProcessing(false);
+    setStatus("已重新生成当前批次图片");
+  }
+
+  function triggerDownload(url: string, fileName: string) {
+    const anchor = document.createElement("a");
+    const baseName = fileName.replace(/\.[^.]+$/, "") || "image";
+    anchor.href = url;
+    anchor.download = `${baseName}-edited.png`;
+    anchor.click();
+  }
+
+  function downloadReadyItems() {
+    items
+      .filter((item) => item.status === "ready" && item.outputUrl)
+      .forEach((item) => {
+        triggerDownload(item.outputUrl!, item.fileName);
+      });
   }
 
   return (
-    <section className="grid gap-6 rounded-3xl border border-black/10 bg-white/90 p-6 shadow-sm lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="space-y-4">
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
-          >
-            上传图片
-          </button>
-          <button
-            type="button"
-            onClick={downloadImage}
-            disabled={!isLoaded}
-            className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            下载编辑后图片
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={async (event) => {
-              const file = event.target.files?.[0];
-              if (file) {
-                await loadFile(file);
-              }
-            }}
-          />
-        </div>
-
-        <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-          <p>状态：{status}</p>
-          <p className="mt-1">文件：{fileName || "未上传"}</p>
-          <p className="mt-1">设备：{metadata.cameraModel || "未读取"}</p>
-        </div>
-
-        <div className="overflow-hidden rounded-3xl border border-black/10 bg-slate-50">
-          <canvas ref={canvasRef} className="h-auto w-full" />
-          {!isLoaded ? (
-            <div className="flex h-64 items-center justify-center text-sm text-slate-500">上传图片后显示预览</div>
-          ) : null}
-        </div>
+    <section className="space-y-6 rounded-3xl border border-black/10 bg-white/90 p-6 shadow-sm">
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+        >
+          上传多张图片
+        </button>
+        <button
+          type="button"
+          onClick={regenerateAllReadyItems}
+          disabled={!items.length || isProcessing}
+          className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          应用样式并重新生成
+        </button>
+        <button
+          type="button"
+          onClick={downloadReadyItems}
+          disabled={!summary.ready}
+          className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          批量下载可用结果
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={async (event) => {
+            const files = Array.from(event.target.files ?? []);
+            await processFiles(files);
+          }}
+        />
       </div>
 
-      <div className="space-y-4">
-        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-          <h2 className="text-lg font-bold text-slate-900">信息编辑</h2>
-          <div className="mt-3 space-y-3">
-            <label className="block text-sm text-slate-700">
-              时间信息
-              <input
-                value={metadata.capturedAt}
-                onChange={(event) => handleMetadataChange("capturedAt", event.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none"
-                placeholder="例如 2026/05/20 18:30:00"
-              />
-            </label>
+      <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+        <p>状态：{status}</p>
+        <p className="mt-1">总数：{summary.total}，可下载：{summary.ready}，跳过：{summary.skipped}，失败：{summary.failed}</p>
+        <p className="mt-1">默认策略：读取时间与地理位置信息写入图片；若均不存在则自动跳过该图片。</p>
+      </div>
 
-            <label className="block text-sm text-slate-700">
-              位置描述
-              <input
-                value={metadata.locationLabel}
-                onChange={(event) => handleMetadataChange("locationLabel", event.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none"
-                placeholder="例如 杭州西湖"
-              />
-            </label>
-
-            <div className="grid grid-cols-2 gap-3">
-              <label className="block text-sm text-slate-700">
-                纬度
-                <input
-                  value={metadata.latitude}
-                  onChange={(event) => handleMetadataChange("latitude", event.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none"
-                  placeholder="30.274084"
-                />
-              </label>
-              <label className="block text-sm text-slate-700">
-                经度
-                <input
-                  value={metadata.longitude}
-                  onChange={(event) => handleMetadataChange("longitude", event.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none"
-                  placeholder="120.155070"
-                />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-slate-200 bg-white p-4">
+      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-4">
           <h2 className="text-lg font-bold text-slate-900">样式设置</h2>
-          <div className="mt-3 space-y-3">
+          <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <label className="block text-sm text-slate-700">
                 字体
@@ -421,25 +478,71 @@ export function ImageEditorTool() {
                 />
               </label>
             </div>
+
+            <div className="flex flex-wrap gap-3 text-sm text-slate-700">
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" checked={showTime} onChange={() => setShowTime((value) => !value)} className="h-4 w-4 accent-indigo-600" />
+                时间
+              </label>
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" checked={showLocation} onChange={() => setShowLocation((value) => !value)} className="h-4 w-4 accent-indigo-600" />
+                地理位置
+              </label>
+            </div>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-4">
-          <h2 className="text-lg font-bold text-slate-900">显示内容</h2>
-          <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-700">
-            <label className="inline-flex items-center gap-2">
-              <input type="checkbox" checked={showTime} onChange={() => setShowTime((value) => !value)} className="h-4 w-4 accent-indigo-600" />
-              时间
-            </label>
-            <label className="inline-flex items-center gap-2">
-              <input type="checkbox" checked={showLocation} onChange={() => setShowLocation((value) => !value)} className="h-4 w-4 accent-indigo-600" />
-              位置描述
-            </label>
-            <label className="inline-flex items-center gap-2">
-              <input type="checkbox" checked={showCoords} onChange={() => setShowCoords((value) => !value)} className="h-4 w-4 accent-indigo-600" />
-              经纬度
-            </label>
-          </div>
+        <div className="space-y-4">
+          {items.length ? (
+            items.map((item) => (
+              <article key={item.id} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                  <h3 className="text-base font-semibold text-slate-900">{item.fileName}</h3>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      item.status === "ready"
+                        ? "bg-emerald-100 text-emerald-700"
+                        : item.status === "skipped"
+                          ? "bg-amber-100 text-amber-800"
+                          : "bg-rose-100 text-rose-700"
+                    }`}
+                  >
+                    {item.status === "ready" ? "可下载" : item.status === "skipped" ? "已跳过" : "失败"}
+                  </span>
+                </div>
+
+                <p className="mb-2 text-sm text-slate-600">{item.message}</p>
+                <p className="mb-2 text-xs text-slate-500">时间：{item.metadata.capturedAt || "无"}</p>
+                <p className="mb-3 text-xs text-slate-500">位置：{item.metadata.locationText || "无"}</p>
+
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                  {item.status === "ready" && item.outputUrl ? (
+                    <img src={item.outputUrl} alt={item.fileName} className="h-auto w-full object-contain" />
+                  ) : (
+                    <img src={item.sourceUrl} alt={item.fileName} className="h-auto w-full object-contain" />
+                  )}
+                </div>
+
+                {item.status === "ready" && item.outputUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (item.outputUrl) {
+                        triggerDownload(item.outputUrl, item.fileName);
+                      }
+                    }}
+                    className="mt-3 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+                  >
+                    下载当前图片
+                  </button>
+                ) : null}
+              </article>
+            ))
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500">
+              上传多张图片后，这里会展示批量处理结果。
+            </div>
+          )}
         </div>
       </div>
     </section>
