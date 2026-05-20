@@ -150,10 +150,10 @@
         {
           "id": "json-formatter",
           "name": "JSON Formatter",
-          "url": "https://jsonformatter.org/",
-          "description": "JSON 格式化、校验和转换。",
+          "url": "/tools/json-formatter",
+          "description": "格式化、校验与高亮 JSON，支持树形折叠、JSONPath 查询和 YAML/XML 转换。",
           "tags": ["开发辅助", "JSON"],
-          "featured": false,
+          "featured": true,
           "status": "active"
         }
       ]
