@@ -76,6 +76,15 @@
       "name": "通用工具",
       "sites": [
         {
+          "id": "password-generator",
+          "name": "密码生成器",
+          "url": "/tools/password-generator",
+          "description": "生成强密码，支持长度、字符类型和历史记录管理。",
+          "tags": ["安全", "密码", "随机生成"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "image-to-text",
           "name": "图片转文字",
           "url": "/tools/image-to-text",
