@@ -6,13 +6,18 @@ interface SiteCardProps {
 }
 
 export function SiteCard({ site }: SiteCardProps) {
-  const isInternalHref = site.url.startsWith("/");
+  const isPlanned = site.status === "planned";
+  const isInternalHref = Boolean(site.url?.startsWith("/"));
 
   return (
     <article className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="mb-3 flex items-start justify-between gap-4">
         <h3 className="text-base font-semibold text-slate-900">{site.name}</h3>
-        {site.featured ? (
+        {isPlanned ? (
+          <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">
+            规划中
+          </span>
+        ) : site.featured ? (
           <span className="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700">
             推荐
           </span>
@@ -32,7 +37,11 @@ export function SiteCard({ site }: SiteCardProps) {
         ))}
       </ul>
 
-      {isInternalHref ? (
+      {isPlanned ? (
+        <span className="inline-flex items-center text-sm font-semibold text-slate-400">
+          功能规划中
+        </span>
+      ) : isInternalHref && site.url ? (
         <Link href={site.url} className="inline-flex items-center text-sm font-semibold text-sky-700 hover:text-sky-800">
           打开工具
         </Link>

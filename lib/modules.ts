@@ -11,25 +11,25 @@ export const moduleList: ModuleMeta[] = [
     slug: "work-productivity",
     name: "工作效率",
     summary: "任务管理、协作与流程自动化工具集合。",
-    status: "planned",
+    status: "active",
   },
   {
     slug: "creative-fun",
     name: "娱乐创意",
     summary: "设计灵感、AI 创作和娱乐玩法资源库。",
-    status: "planned",
+    status: "active",
   },
   {
     slug: "learning-education",
     name: "学习教育",
     summary: "课程、知识库、学习方法和练习平台。",
-    status: "planned",
+    status: "active",
   },
   {
     slug: "social-interaction",
     name: "社交互动",
     summary: "社区交流、创作者平台与互动工具。",
-    status: "planned",
+    status: "active",
   },
 ];
 

@@ -1,8 +1,16 @@
 import personalToolsData from "@/data/personal-tools.json";
+import workProductivityData from "@/data/work-productivity.json";
+import creativeFunData from "@/data/creative-fun.json";
+import learningEducationData from "@/data/learning-education.json";
+import socialInteractionData from "@/data/social-interaction.json";
 import type { SiteGroup, SiteItem, SiteModuleData } from "@/types/site";
 
 const moduleDatasetMap: Record<string, unknown> = {
   "personal-tools": personalToolsData,
+  "work-productivity": workProductivityData,
+  "creative-fun": creativeFunData,
+  "learning-education": learningEducationData,
+  "social-interaction": socialInteractionData,
 };
 
 function isValidSiteHref(input: unknown): input is string {
@@ -28,14 +36,15 @@ function isSiteItem(value: unknown): value is SiteItem {
   }
 
   const candidate = value as Partial<SiteItem>;
-  const validStatus = candidate.status === "active" || candidate.status === "archived";
+  const validStatus = candidate.status === "active" || candidate.status === "archived" || candidate.status === "planned";
+  const validUrl = candidate.url === undefined || isValidSiteHref(candidate.url);
 
   return (
     typeof candidate.id === "string" &&
     candidate.id.length > 0 &&
     typeof candidate.name === "string" &&
     candidate.name.length > 0 &&
-    isValidSiteHref(candidate.url) &&
+    validUrl &&
     typeof candidate.description === "string" &&
     Array.isArray(candidate.tags) &&
     candidate.tags.every((tag) => typeof tag === "string") &&

@@ -1,0 +1,204 @@
+{
+  "slug": "learning-education",
+  "title": "学习教育",
+  "description": "学习教育模块现在会展示已可直接使用的学习辅助工具，以及从 To-do 拆出来的完整学习路线图。",
+  "groups": [
+    {
+      "id": "live-tools",
+      "name": "已上线学习辅助工具",
+      "sites": [
+        {
+          "id": "image-to-text-learning",
+          "name": "图片转文字",
+          "url": "/tools/image-to-text",
+          "description": "上传截图或讲义照片自动 OCR 识别文字，适合整理课堂内容和题目。",
+          "tags": ["OCR", "题目提取", "学习"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "countdown-tool-learning",
+          "name": "倒计时工具",
+          "url": "/tools/countdown-tool",
+          "description": "适合考试、截止日期和复习阶段管理，支持多个倒计时和提醒。",
+          "tags": ["考试", "提醒", "时间规划"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "markdown-to-html-learning",
+          "name": "Markdown 转 HTML",
+          "url": "/tools/markdown-to-html",
+          "description": "适合学习笔记和课程文档整理，支持高亮、主题和导出。",
+          "tags": ["笔记", "Markdown", "导出"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "json-formatter-learning",
+          "name": "JSON 格式化工具",
+          "url": "/tools/json-formatter",
+          "description": "适合编程学习与接口练习，支持校验、树视图和 JSONPath。",
+          "tags": ["编程", "JSON", "练习"],
+          "featured": false,
+          "status": "active"
+        },
+        {
+          "id": "regex-tester-learning",
+          "name": "正则表达式测试器",
+          "url": "/tools/regex-tester",
+          "description": "适合练习文本匹配与规则表达，内置模板和生成器。",
+          "tags": ["正则", "文本", "练习"],
+          "featured": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "roadmap-tools",
+      "name": "学习教育路线图",
+      "sites": [
+        {
+          "id": "word-flashcards",
+          "name": "单词记忆卡片",
+          "description": "基于艾宾浩斯曲线安排复习，后续加入发音和例句学习。",
+          "tags": ["单词", "记忆曲线", "发音"],
+          "status": "planned"
+        },
+        {
+          "id": "math-generator",
+          "name": "数学练习题生成器",
+          "description": "生成不同难度数学题，规划自动批改与错题集。",
+          "tags": ["数学", "练习", "批改"],
+          "status": "planned"
+        },
+        {
+          "id": "coding-bank",
+          "name": "编程题库",
+          "description": "在线编写和运行代码题，后续扩展自动评测与解法分享。",
+          "tags": ["编程", "题库", "评测"],
+          "status": "planned"
+        },
+        {
+          "id": "study-planner",
+          "name": "学习计划制定工具",
+          "description": "分解学习目标并追踪进度，预留智能推荐和学习报告。",
+          "tags": ["学习计划", "进度", "报告"],
+          "status": "planned"
+        },
+        {
+          "id": "mistake-book",
+          "name": "错题本",
+          "description": "记录错题与定期复习，规划 OCR 识别和错误类型分析。",
+          "tags": ["错题", "OCR", "复习"],
+          "status": "planned"
+        },
+        {
+          "id": "knowledge-cards",
+          "name": "知识卡片",
+          "description": "Markdown 卡片、标签与随机复习，后续加入间隔重复算法。",
+          "tags": ["知识卡片", "复习", "标签"],
+          "status": "planned"
+        },
+        {
+          "id": "mind-map",
+          "name": "思维导图工具",
+          "description": "节点编辑、颜色和图标，后续支持 AI 生成与协作。",
+          "tags": ["思维导图", "整理", "协作"],
+          "status": "planned"
+        },
+        {
+          "id": "course-schedule",
+          "name": "课程表管理",
+          "description": "课程提醒、作业记录和考试倒计时，并规划课程资料管理。",
+          "tags": ["课程表", "作业", "提醒"],
+          "status": "planned"
+        },
+        {
+          "id": "notes-sharing",
+          "name": "学习笔记分享平台",
+          "description": "支持 Markdown 和代码高亮，后续扩展评分和付费笔记。",
+          "tags": ["笔记", "分享", "评分"],
+          "status": "planned"
+        },
+        {
+          "id": "question-practice",
+          "name": "在线题库练习",
+          "description": "系统化刷题，记录错题历史，规划智能推荐和模拟考试。",
+          "tags": ["题库", "刷题", "考试"],
+          "status": "planned"
+        },
+        {
+          "id": "recite-helper",
+          "name": "背诵助手",
+          "description": "分段背诵、遮挡关键词和语音朗读，后续支持默写与语音识别。",
+          "tags": ["背诵", "语音", "记忆"],
+          "status": "planned"
+        },
+        {
+          "id": "study-duration",
+          "name": "学习时长统计",
+          "description": "记录学习时长和趋势图，规划专注度分析与排行榜。",
+          "tags": ["学习时长", "统计", "趋势"],
+          "status": "planned"
+        },
+        {
+          "id": "reading-notes",
+          "name": "读书笔记管理",
+          "description": "记录进度、摘抄和感想，后续支持书籍推荐和读书报告。",
+          "tags": ["读书", "笔记", "报告"],
+          "status": "planned"
+        },
+        {
+          "id": "paper-manager",
+          "name": "论文管理工具",
+          "description": "管理文献与参考文献格式，后续支持 PDF 标注和引用网络。",
+          "tags": ["论文", "文献", "引用"],
+          "status": "planned"
+        },
+        {
+          "id": "teaching-whiteboard",
+          "name": "在线白板教学",
+          "description": "教师讲解、学生观看和回放，后续支持举手和分组讨论。",
+          "tags": ["教学", "白板", "互动"],
+          "status": "planned"
+        },
+        {
+          "id": "homework-submit",
+          "name": "作业提交系统",
+          "description": "作业上传、批改和评分，并规划查重与成绩统计。",
+          "tags": ["作业", "评分", "查重"],
+          "status": "planned"
+        },
+        {
+          "id": "exam-countdown",
+          "name": "考试倒计时",
+          "description": "围绕考试日期展示倒计时，并规划复习进度和计划生成功能。",
+          "tags": ["考试", "倒计时", "复习"],
+          "status": "planned"
+        },
+        {
+          "id": "study-group",
+          "name": "学习小组管理",
+          "description": "资料分享、讨论和互相监督，后续支持打卡和语音讨论。",
+          "tags": ["学习小组", "讨论", "打卡"],
+          "status": "planned"
+        },
+        {
+          "id": "skill-tree",
+          "name": "技能树可视化",
+          "description": "游戏化学习路径与节点解锁，后续加入成就系统和多路线。",
+          "tags": ["技能树", "游戏化", "成就"],
+          "status": "planned"
+        },
+        {
+          "id": "study-achievement",
+          "name": "学习成就系统",
+          "description": "任务成就和勋章激励，规划排行榜和成就分享。",
+          "tags": ["成就", "勋章", "排行榜"],
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

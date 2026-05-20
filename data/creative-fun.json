@@ -1,0 +1,204 @@
+{
+  "slug": "creative-fun",
+  "title": "娱乐创意",
+  "description": "把娱乐创意类项目分成已上线的可玩工具与完整创意清单，后续可以从这里继续孵化新玩法。",
+  "groups": [
+    {
+      "id": "live-tools",
+      "name": "已上线创意工具",
+      "sites": [
+        {
+          "id": "random-decision-fun",
+          "name": "随机决策器",
+          "url": "/tools/random-decision",
+          "description": "多选项随机抽取，支持权重和历史记录，适合吃什么、去哪玩等场景。",
+          "tags": ["随机", "选择", "娱乐"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "color-picker-fun",
+          "name": "颜色选择器",
+          "url": "/tools/color-picker",
+          "description": "HEX/RGB/HSL 转换、配色推荐、调色板保存和图片取色。",
+          "tags": ["颜色", "配色", "设计"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "image-editor-fun",
+          "name": "图片编辑器",
+          "url": "/tools/image-editor",
+          "description": "批量读取 EXIF 时间与位置并叠加到图片中，支持样式统一处理。",
+          "tags": ["图片", "EXIF", "创作"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "image-compressor-fun",
+          "name": "图片压缩工具",
+          "url": "/tools/image-compressor",
+          "description": "批量压缩、格式转换、中心裁剪和旋转，适合创作素材快速处理。",
+          "tags": ["压缩", "格式转换", "图片"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "qr-generator-fun",
+          "name": "二维码生成器",
+          "url": "/tools/qr-generator",
+          "description": "自定义颜色、Logo、扫码与批量生成，适合活动海报和创意分享。",
+          "tags": ["二维码", "海报", "分享"],
+          "featured": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "roadmap-tools",
+      "name": "娱乐创意路线图",
+      "sites": [
+        {
+          "id": "meme-maker",
+          "name": "表情包制作器",
+          "description": "上传图片加文字生成表情包，后续扩展热门模板库和 GIF 制作。",
+          "tags": ["表情包", "模板", "GIF"],
+          "status": "planned"
+        },
+        {
+          "id": "avatar-generator",
+          "name": "头像生成器",
+          "description": "根据名字或关键词生成头像，并规划卡通、像素、水彩等多风格批量输出。",
+          "tags": ["头像", "生成", "风格化"],
+          "status": "planned"
+        },
+        {
+          "id": "quote-generator",
+          "name": "名言生成器",
+          "description": "随机励志或搞笑语录，后续加入主题生成和名言配图。",
+          "tags": ["名言", "文案", "分享"],
+          "status": "planned"
+        },
+        {
+          "id": "zodiac-fortune",
+          "name": "星座运势查询",
+          "description": "每日运势、爱情事业财运，并扩展星座配对和星座科普。",
+          "tags": ["星座", "运势", "配对"],
+          "status": "planned"
+        },
+        {
+          "id": "fortune-stick",
+          "name": "抽签工具",
+          "description": "自定义签文与抽签体验，后续扩展 AI 解签和许愿记录。",
+          "tags": ["抽签", "签文", "许愿"],
+          "status": "planned"
+        },
+        {
+          "id": "guess-number",
+          "name": "猜数字游戏",
+          "description": "经典随机数字挑战，规划难度选择和排行榜。",
+          "tags": ["游戏", "猜数字", "排行榜"],
+          "status": "planned"
+        },
+        {
+          "id": "typing-speed",
+          "name": "打字速度测试",
+          "description": "测试速度与准确率，后续加入练习模式和代码打字。",
+          "tags": ["打字", "练习", "测试"],
+          "status": "planned"
+        },
+        {
+          "id": "memory-game",
+          "name": "记忆力游戏",
+          "description": "翻牌配对玩法，后续支持多主题与多人对战。",
+          "tags": ["记忆", "翻牌", "对战"],
+          "status": "planned"
+        },
+        {
+          "id": "jigsaw-game",
+          "name": "拼图游戏",
+          "description": "上传图片生成拼图，规划计时挑战与 3D 拼图玩法。",
+          "tags": ["拼图", "上传图片", "挑战"],
+          "status": "planned"
+        },
+        {
+          "id": "music-player",
+          "name": "音乐播放器",
+          "description": "播放列表、歌词和进度控制，后续加入音乐可视化和推荐。",
+          "tags": ["音乐", "播放", "可视化"],
+          "status": "planned"
+        },
+        {
+          "id": "movie-recommender",
+          "name": "电影推荐工具",
+          "description": "根据偏好推荐影片，规划评分收藏、AI 推荐和豆瓣信息接入。",
+          "tags": ["电影", "推荐", "评分"],
+          "status": "planned"
+        },
+        {
+          "id": "recipe-sharing",
+          "name": "美食食谱分享",
+          "description": "分享和搜索食谱，后续支持购物清单和营养分析。",
+          "tags": ["食谱", "收藏", "营养"],
+          "status": "planned"
+        },
+        {
+          "id": "travel-diary",
+          "name": "旅行日记",
+          "description": "记录旅行照片与地点，规划路线轨迹和旅行相册自动排版。",
+          "tags": ["旅行", "地图", "相册"],
+          "status": "planned"
+        },
+        {
+          "id": "pet-diary",
+          "name": "宠物日记",
+          "description": "记录体重、疫苗和日常，后续支持健康提醒和多宠管理。",
+          "tags": ["宠物", "健康", "提醒"],
+          "status": "planned"
+        },
+        {
+          "id": "mood-diary",
+          "name": "心情日记",
+          "description": "用颜色和表情记录每日心情，并扩展情绪分析和分享。",
+          "tags": ["心情", "日记", "曲线"],
+          "status": "planned"
+        },
+        {
+          "id": "dream-recorder",
+          "name": "梦境记录器",
+          "description": "记录梦境与标签搜索，并规划梦境解析和关键词统计。",
+          "tags": ["梦境", "记录", "分析"],
+          "status": "planned"
+        },
+        {
+          "id": "story-generator",
+          "name": "随机故事生成器",
+          "description": "输入关键词生成故事，预留续写和多结局能力。",
+          "tags": ["故事", "创作", "AI"],
+          "status": "planned"
+        },
+        {
+          "id": "poetry-generator",
+          "name": "诗歌生成器",
+          "description": "按主题生成不同风格诗歌，后续扩展押韵检测。",
+          "tags": ["诗歌", "古风", "押韵"],
+          "status": "planned"
+        },
+        {
+          "id": "virtual-pet",
+          "name": "虚拟宠物养成",
+          "description": "喂食、升级和互动养成，并规划多宠选择和宠物对战。",
+          "tags": ["宠物", "养成", "对战"],
+          "status": "planned"
+        },
+        {
+          "id": "doodle-board",
+          "name": "在线涂鸦板",
+          "description": "简单画板、颜色和橡皮擦，后续加入图层和多人协作。",
+          "tags": ["涂鸦", "绘画", "协作"],
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

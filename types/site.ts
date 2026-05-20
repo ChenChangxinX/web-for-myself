@@ -10,12 +10,12 @@ export interface ModuleMeta {
 export interface SiteItem {
   id: string;
   name: string;
-  url: string;
+  url?: string;
   description: string;
   tags: string[];
   icon?: string;
   featured?: boolean;
-  status: "active" | "archived";
+  status: "active" | "archived" | "planned";
 }
 
 export interface SiteGroup {
