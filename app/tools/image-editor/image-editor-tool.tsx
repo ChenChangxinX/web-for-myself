@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import exifr from "exifr";
+import JSZip from "jszip";
 
 /* eslint-disable @next/next/no-img-element */
 
 type OverlayPosition = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+type OutputFormat = "png" | "jpeg" | "webp";
 
 interface MetadataState {
   capturedAt: string;
@@ -18,6 +20,7 @@ interface BatchItem {
   fileName: string;
   sourceUrl: string;
   outputUrl?: string;
+  outputBlob?: Blob;
   status: "ready" | "skipped" | "error";
   message: string;
   metadata: MetadataState;
@@ -28,6 +31,12 @@ const FONT_OPTIONS = [
   { label: "Noto Sans SC", value: '"Noto Sans SC", sans-serif' },
   { label: "Monospace", value: '"JetBrains Mono", monospace' },
   { label: "Serif", value: "Georgia, serif" },
+];
+
+const OUTPUT_FORMAT_OPTIONS: Array<{ label: string; value: OutputFormat; mime: string; extension: string; quality?: number }> = [
+  { label: "PNG（无损）", value: "png", mime: "image/png", extension: "png" },
+  { label: "JPG（体积更小）", value: "jpeg", mime: "image/jpeg", extension: "jpg", quality: 0.92 },
+  { label: "WebP（推荐）", value: "webp", mime: "image/webp", extension: "webp", quality: 0.92 },
 ];
 
 function formatDate(value: unknown) {
@@ -61,6 +70,35 @@ function drawRoundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, wi
   ctx.closePath();
 }
 
+function getOutputFormatConfig(format: OutputFormat) {
+  return OUTPUT_FORMAT_OPTIONS.find((item) => item.value === format) ?? OUTPUT_FORMAT_OPTIONS[0];
+}
+
+function padNumber(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+function sanitizeFileName(value: string) {
+  return value.replace(/[\\/:*?"<>|]/g, "_").replace(/\s+/g, " ").trim();
+}
+
+function buildOutputName(pattern: string, originalFileName: string, index: number, extension: string) {
+  const now = new Date();
+  const baseName = originalFileName.replace(/\.[^.]+$/, "") || "image";
+  const date = `${now.getFullYear()}${padNumber(now.getMonth() + 1)}${padNumber(now.getDate())}`;
+  const time = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
+  const serial = String(index + 1).padStart(3, "0");
+
+  const rawName = pattern
+    .replaceAll("{name}", baseName)
+    .replaceAll("{index}", serial)
+    .replaceAll("{date}", date)
+    .replaceAll("{time}", time);
+
+  const normalized = sanitizeFileName(rawName) || `${baseName}-${serial}`;
+  return `${normalized}.${extension}`;
+}
+
 export function ImageEditorTool() {
   const [items, setItems] = useState<BatchItem[]>([]);
   const [showTime, setShowTime] = useState(true);
@@ -71,6 +109,8 @@ export function ImageEditorTool() {
   const [fontWeight, setFontWeight] = useState<"normal" | "bold">("bold");
   const [position, setPosition] = useState<OverlayPosition>("bottom-left");
   const [padding, setPadding] = useState(18);
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>("png");
+  const [fileNamePattern, setFileNamePattern] = useState("{name}-edited-{index}");
   const [isProcessing, setIsProcessing] = useState(false);
   const [status, setStatus] = useState("等待上传图片");
 
@@ -164,17 +204,21 @@ export function ImageEditorTool() {
         ctx.fillText(line, x + padding, y + padding + index * lineHeight);
       });
 
+      const format = getOutputFormatConfig(outputFormat);
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((value) => resolve(value), "image/png");
+        canvas.toBlob((value) => resolve(value), format.mime, format.quality);
       });
 
       if (!blob) {
         return null;
       }
 
-      return URL.createObjectURL(blob);
+      return {
+        outputBlob: blob,
+        outputUrl: URL.createObjectURL(blob),
+      };
     },
-    [fontColor, fontFamily, fontSize, fontWeight, padding, position, resolveOverlayLines],
+    [fontColor, fontFamily, fontSize, fontWeight, outputFormat, padding, position, resolveOverlayLines],
   );
 
   const summary = useMemo(() => {
@@ -245,9 +289,9 @@ export function ImageEditorTool() {
           continue;
         }
 
-        const outputUrl = await renderImageWithOverlay(sourceUrl, metadata);
+        const rendered = await renderImageWithOverlay(sourceUrl, metadata);
 
-        if (!outputUrl) {
+        if (!rendered) {
           nextItems.push({
             id: `${file.name}-${index}`,
             fileName: file.name,
@@ -263,7 +307,8 @@ export function ImageEditorTool() {
           id: `${file.name}-${index}`,
           fileName: file.name,
           sourceUrl,
-          outputUrl,
+          outputUrl: rendered.outputUrl,
+          outputBlob: rendered.outputBlob,
           status: "ready",
           message: "处理完成",
           metadata,
@@ -313,11 +358,12 @@ export function ImageEditorTool() {
           };
         }
 
-        const outputUrl = await renderImageWithOverlay(item.sourceUrl, item.metadata);
-        if (!outputUrl) {
+        const rendered = await renderImageWithOverlay(item.sourceUrl, item.metadata);
+        if (!rendered) {
           return {
             ...item,
             outputUrl: undefined,
+            outputBlob: undefined,
             status: "error" as const,
             message: "重渲染失败",
           };
@@ -325,7 +371,8 @@ export function ImageEditorTool() {
 
         return {
           ...item,
-          outputUrl,
+          outputUrl: rendered.outputUrl,
+          outputBlob: rendered.outputBlob,
           status: "ready" as const,
           message: "处理完成",
         };
@@ -339,18 +386,34 @@ export function ImageEditorTool() {
 
   function triggerDownload(url: string, fileName: string) {
     const anchor = document.createElement("a");
-    const baseName = fileName.replace(/\.[^.]+$/, "") || "image";
     anchor.href = url;
-    anchor.download = `${baseName}-edited.png`;
+    anchor.download = fileName;
     anchor.click();
   }
 
-  function downloadReadyItems() {
-    items
-      .filter((item) => item.status === "ready" && item.outputUrl)
-      .forEach((item) => {
-        triggerDownload(item.outputUrl!, item.fileName);
-      });
+  async function downloadReadyItems() {
+    const readyItems = items.filter((item) => item.status === "ready" && item.outputBlob);
+    if (!readyItems.length) {
+      return;
+    }
+
+    const format = getOutputFormatConfig(outputFormat);
+    const zip = new JSZip();
+
+    readyItems.forEach((item, index) => {
+      if (!item.outputBlob) {
+        return;
+      }
+
+      const outputName = buildOutputName(fileNamePattern, item.fileName, index, format.extension);
+      zip.file(outputName, item.outputBlob);
+    });
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    const batchTag = `${new Date().getFullYear()}${padNumber(new Date().getMonth() + 1)}${padNumber(new Date().getDate())}-${padNumber(new Date().getHours())}${padNumber(new Date().getMinutes())}${padNumber(new Date().getSeconds())}`;
+    const zipUrl = URL.createObjectURL(zipBlob);
+    triggerDownload(zipUrl, `image-batch-${batchTag}.zip`);
+    URL.revokeObjectURL(zipUrl);
   }
 
   return (
@@ -374,10 +437,10 @@ export function ImageEditorTool() {
         <button
           type="button"
           onClick={downloadReadyItems}
-          disabled={!summary.ready}
+          disabled={!summary.ready || isProcessing}
           className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          批量下载可用结果
+          批量下载可用结果（ZIP）
         </button>
         <input
           ref={fileInputRef}
@@ -396,6 +459,7 @@ export function ImageEditorTool() {
         <p>状态：{status}</p>
         <p className="mt-1">总数：{summary.total}，可下载：{summary.ready}，跳过：{summary.skipped}，失败：{summary.failed}</p>
         <p className="mt-1">默认策略：读取时间与地理位置信息写入图片；若均不存在则自动跳过该图片。</p>
+        <p className="mt-1">下载策略：先设置命名模板与输出格式，批量导出时统一按规则打包为 ZIP。</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -479,6 +543,35 @@ export function ImageEditorTool() {
               </label>
             </div>
 
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block text-sm text-slate-700">
+                输出格式
+                <select
+                  value={outputFormat}
+                  onChange={(event) => setOutputFormat(event.target.value as OutputFormat)}
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none"
+                >
+                  {OUTPUT_FORMAT_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-sm text-slate-700">
+                文件命名模板
+                <input
+                  type="text"
+                  value={fileNamePattern}
+                  onChange={(event) => setFileNamePattern(event.target.value)}
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none"
+                  placeholder="{name}-edited-{index}"
+                />
+              </label>
+            </div>
+
+            <p className="text-xs text-slate-500">命名占位符：{'{name}'} 原文件名、{'{index}'} 序号、{'{date}'} 日期、{'{time}'} 时间</p>
+
             <div className="flex flex-wrap gap-3 text-sm text-slate-700">
               <label className="inline-flex items-center gap-2">
                 <input type="checkbox" checked={showTime} onChange={() => setShowTime((value) => !value)} className="h-4 w-4 accent-indigo-600" />
@@ -528,7 +621,9 @@ export function ImageEditorTool() {
                     type="button"
                     onClick={() => {
                       if (item.outputUrl) {
-                        triggerDownload(item.outputUrl, item.fileName);
+                        const format = getOutputFormatConfig(outputFormat);
+                        const outputName = buildOutputName(fileNamePattern, item.fileName, 0, format.extension);
+                        triggerDownload(item.outputUrl, outputName);
                       }
                     }}
                     className="mt-3 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
