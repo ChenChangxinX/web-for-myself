@@ -76,6 +76,15 @@
       "name": "通用工具",
       "sites": [
         {
+          "id": "color-picker",
+          "name": "颜色选择器",
+          "url": "/tools/color-picker",
+          "description": "选择颜色并获取 HEX、RGB、HSL 代码，支持调色板保存、配色推荐和图片取色。",
+          "tags": ["色彩工具", "设计", "前端开发"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "image-editor",
           "name": "图片编辑器",
           "url": "/tools/image-editor",
