@@ -85,6 +85,69 @@
           "status": "active"
         },
         {
+          "id": "qr-generator",
+          "name": "二维码生成器",
+          "url": "/tools/qr-generator",
+          "description": "支持文本/链接二维码生成、Logo 定制、摄像头扫码与批量生成。",
+          "tags": ["二维码", "扫码", "分享"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "countdown-tool",
+          "name": "倒计时工具",
+          "url": "/tools/countdown-tool",
+          "description": "支持多个倒计时与正计时，重要日期提醒一目了然。",
+          "tags": ["倒计时", "提醒", "时间管理"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "random-decision",
+          "name": "随机决策器",
+          "url": "/tools/random-decision",
+          "description": "输入选项随机抽取，支持权重设置与历史记录。",
+          "tags": ["随机", "决策", "选择困难"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "unit-converter",
+          "name": "单位转换器",
+          "url": "/tools/unit-converter",
+          "description": "长度、重量、温度、货币转换，支持实时汇率更新与自定义单位。",
+          "tags": ["单位转换", "汇率", "计算"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "regex-tester",
+          "name": "正则表达式测试器",
+          "url": "/tools/regex-tester",
+          "description": "实时测试正则表达式，提供匹配高亮、模板、解释与生成器。",
+          "tags": ["正则", "文本处理", "开发辅助"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "markdown-to-html",
+          "name": "Markdown 转 HTML",
+          "url": "/tools/markdown-to-html",
+          "description": "Markdown 实时转换 HTML，支持代码高亮、主题切换和导出。",
+          "tags": ["Markdown", "HTML", "文档"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "image-compressor",
+          "name": "图片压缩工具",
+          "url": "/tools/image-compressor",
+          "description": "批量压缩图片并支持格式转换、裁剪和旋转。",
+          "tags": ["图片处理", "压缩", "格式转换"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "color-picker",
           "name": "颜色选择器",
           "url": "/tools/color-picker",
