@@ -229,6 +229,76 @@
           "status": "active"
         }
       ]
+    },
+    {
+      "id": "personal-tools-roadmap",
+      "name": "个人工具路线图（13-20）",
+      "sites": [
+        {
+          "id": "file-format-converter",
+          "name": "文件格式转换",
+          "description": "常见格式互转（如 PDF 转图片、视频格式转换），规划批量转换与云端转换能力，方便处理大文件。",
+          "tags": ["格式转换", "批量处理", "云端"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "screen-recorder-tool",
+          "name": "屏幕录制工具",
+          "description": "录制屏幕生成 GIF 或视频，支持标注；后续扩展裁剪、文字、箭头和摄像头同录。",
+          "tags": ["录屏", "GIF", "标注"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "shortcut-cheatsheet",
+          "name": "快捷键查询工具",
+          "description": "按软件和分类检索快捷键，规划自定义快捷键保存与游戏化练习。",
+          "tags": ["快捷键", "搜索", "练习"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "timezone-converter",
+          "name": "时区转换器",
+          "description": "多时区时间换算，适合跨国协作；后续增加会议时间建议与多时区时钟。",
+          "tags": ["时区", "协作", "会议"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "word-counter-tool",
+          "name": "字数统计工具",
+          "description": "统计字数、词数、段落数，支持中英文；后续扩展阅读时长估算与关键词分析。",
+          "tags": ["字数统计", "关键词", "写作"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "url-shortener-tool",
+          "name": "网址缩短工具",
+          "description": "生成短链接并支持自定义短链，规划点击统计与二维码直达。",
+          "tags": ["短链接", "统计", "二维码"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "random-name-generator",
+          "name": "随机名字生成器",
+          "description": "生成人名、公司名、产品名等多风格名称，后续扩展关键词 AI 生成与域名可用性检查。",
+          "tags": ["随机生成", "命名", "域名"],
+          "featured": false,
+          "status": "planned"
+        },
+        {
+          "id": "base-converter-tool",
+          "name": "进制转换器",
+          "description": "支持二进制、八进制、十进制、十六进制互转，规划位运算和浮点二进制表示。",
+          "tags": ["进制", "位运算", "开发"],
+          "featured": false,
+          "status": "planned"
+        }
+      ]
     }
   ]
 }
