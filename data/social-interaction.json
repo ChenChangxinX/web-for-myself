@@ -1,152 +1,32 @@
 {
   "slug": "social-interaction",
   "title": "社交互动",
-  "description": "社交互动模块先沉淀完整产品方向，保留可复用的基础工具，同时把 To-do 中的社交类项目拆成结构化路线图。",
+  "description": "把社交互动灵感落地为可体验的社区原型工具。",
   "groups": [
     {
-      "id": "roadmap-tools",
-      "name": "社交互动路线图",
+      "id": "social-live-tools",
+      "name": "已上线社交互动工具",
       "sites": [
-        {
-          "id": "anonymous-chat",
-          "name": "匿名聊天室",
-          "description": "随机匹配陌生人聊天，后续支持兴趣匹配和举报机制。",
-          "tags": ["匿名", "聊天", "匹配"],
-          "status": "planned"
-        },
-        {
-          "id": "tree-hole",
-          "name": "树洞倾诉平台",
-          "description": "匿名发布心事与安慰互动，并规划情绪分析和咨询连接。",
-          "tags": ["树洞", "情绪", "匿名"],
-          "status": "planned"
-        },
-        {
-          "id": "qa-community",
-          "name": "问答社区（Mini 版）",
-          "description": "提问、回答、点赞和采纳，后续扩展积分与话题关注。",
-          "tags": ["问答", "社区", "积分"],
-          "status": "planned"
-        },
-        {
-          "id": "blog-platform",
-          "name": "博客平台",
-          "description": "发布文章、评论和关注，规划 RSS 与专栏归档。",
-          "tags": ["博客", "Markdown", "关注"],
-          "status": "planned"
-        },
-        {
-          "id": "photo-sharing",
-          "name": "照片分享平台",
-          "description": "照片点赞、评论和标签，后续支持滤镜和照片故事。",
-          "tags": ["照片", "点赞", "滤镜"],
-          "status": "planned"
-        },
-        {
-          "id": "short-video",
-          "name": "短视频分享平台",
-          "description": "上传观看短视频，规划视频编辑和话题挑战。",
-          "tags": ["短视频", "话题", "创作"],
-          "status": "planned"
-        },
-        {
-          "id": "music-sharing",
-          "name": "音乐分享平台",
-          "description": "歌单、评论和推荐，后续支持推荐算法与歌词同步。",
-          "tags": ["音乐", "歌单", "推荐"],
-          "status": "planned"
-        },
-        {
-          "id": "book-review",
-          "name": "书评分享平台",
-          "description": "分享读书心得与书单，后续支持进度同步。",
-          "tags": ["书评", "书单", "阅读"],
-          "status": "planned"
-        },
-        {
-          "id": "movie-review",
-          "name": "电影评论平台",
-          "description": "观影记录、评分和影单，帮助选片与交流。",
-          "tags": ["电影", "评论", "影单"],
-          "status": "planned"
-        },
-        {
-          "id": "food-sharing",
-          "name": "美食分享平台",
-          "description": "分享美食照片和餐厅位置，后续支持地图和打卡。",
-          "tags": ["美食", "打卡", "地图"],
-          "status": "planned"
-        },
-        {
-          "id": "travel-sharing",
-          "name": "旅行分享平台",
-          "description": "游记、景点和攻略，规划行程规划和旅行足迹地图。",
-          "tags": ["旅行", "游记", "地图"],
-          "status": "planned"
-        },
-        {
-          "id": "skill-swap",
-          "name": "技能交换平台",
-          "description": "发布会的技能与想学的技能，规划匹配算法和线上教学。",
-          "tags": ["技能交换", "匹配", "学习"],
-          "status": "planned"
-        },
-        {
-          "id": "second-hand",
-          "name": "二手交易平台",
-          "description": "物品发布、搜索和私信，后续扩展信用评价和同城交易。",
-          "tags": ["二手", "交易", "同城"],
-          "status": "planned"
-        },
-        {
-          "id": "event-publish",
-          "name": "活动发布平台",
-          "description": "活动报名、地点时间人数管理，后续支持提醒和签到。",
-          "tags": ["活动", "报名", "签到"],
-          "status": "planned"
-        },
-        {
-          "id": "poll-platform",
-          "name": "投票调查平台",
-          "description": "单选多选与问卷分析，规划报告与可视化结果。",
-          "tags": ["投票", "问卷", "统计"],
-          "status": "planned"
-        },
-        {
-          "id": "confession-wall",
-          "name": "表白墙",
-          "description": "匿名发布表白内容，后续支持回应和成功率统计。",
-          "tags": ["表白", "匿名", "校园"],
-          "status": "planned"
-        },
-        {
-          "id": "wish-list-sharing",
-          "name": "愿望清单分享",
-          "description": "分享愿望与进度，规划众筹和陪伴见证机制。",
-          "tags": ["愿望", "进度", "分享"],
-          "status": "planned"
-        },
-        {
-          "id": "daily-photo",
-          "name": "每日一图分享",
-          "description": "每日图片投稿和评选，后续支持图片日历回顾。",
-          "tags": ["图片", "投稿", "日历"],
-          "status": "planned"
-        },
-        {
-          "id": "voice-chat",
-          "name": "语音聊天室",
-          "description": "多人房间实时语音，后续支持房间主题和录音回放。",
-          "tags": ["语音", "房间", "讨论"],
-          "status": "planned"
-        },
-        {
-          "id": "collab-docs",
-          "name": "在线协作文档",
-          "description": "多人实时编辑、评论和版本历史，规划权限和模板。",
-          "tags": ["协作", "文档", "版本"],
-          "status": "planned"
-        }
+        { "id": "anonymous-chat-live", "name": "匿名聊天室", "url": "/tools/anonymous-chat", "description": "随机匿名聊天与话题匹配。", "tags": ["匿名", "聊天", "匹配"], "featured": true, "status": "active" },
+        { "id": "tree-hole-live", "name": "树洞倾诉平台", "url": "/tools/tree-hole", "description": "匿名发帖、安慰互动与情绪标签。", "tags": ["树洞", "情绪", "匿名"], "featured": true, "status": "active" },
+        { "id": "qa-community-live", "name": "问答社区（Mini 版）", "url": "/tools/qa-community", "description": "提问回答、点赞和采纳。", "tags": ["问答", "社区", "积分"], "featured": true, "status": "active" },
+        { "id": "blog-platform-live", "name": "博客平台", "url": "/tools/blog-platform", "description": "Markdown 博客发布和订阅。", "tags": ["博客", "Markdown", "关注"], "featured": true, "status": "active" },
+        { "id": "photo-sharing-live", "name": "照片分享平台", "url": "/tools/photo-sharing", "description": "图片发布、点赞和评论。", "tags": ["照片", "点赞", "滤镜"], "featured": true, "status": "active" },
+        { "id": "short-video-live", "name": "短视频分享平台", "url": "/tools/short-video", "description": "视频发布、话题和互动。", "tags": ["短视频", "话题", "创作"], "featured": true, "status": "active" },
+        { "id": "music-sharing-live", "name": "音乐分享平台", "url": "/tools/music-sharing", "description": "歌单分享、评论与推荐。", "tags": ["音乐", "歌单", "推荐"], "featured": true, "status": "active" },
+        { "id": "book-review-live", "name": "书评分享平台", "url": "/tools/book-review", "description": "书评发布、评分和书单。", "tags": ["书评", "书单", "阅读"], "featured": true, "status": "active" },
+        { "id": "movie-review-live", "name": "电影评论平台", "url": "/tools/movie-review", "description": "观影记录和影单推荐。", "tags": ["电影", "评论", "影单"], "featured": true, "status": "active" },
+        { "id": "food-sharing-live", "name": "美食分享平台", "url": "/tools/food-sharing", "description": "分享美食打卡与店铺标签。", "tags": ["美食", "打卡", "地图"], "featured": true, "status": "active" },
+        { "id": "travel-sharing-live", "name": "旅行分享平台", "url": "/tools/travel-sharing", "description": "游记、景点和路线灵感。", "tags": ["旅行", "游记", "地图"], "featured": true, "status": "active" },
+        { "id": "skill-swap-live", "name": "技能交换平台", "url": "/tools/skill-swap", "description": "技能发布与互学匹配。", "tags": ["技能交换", "匹配", "学习"], "featured": true, "status": "active" },
+        { "id": "second-hand-live", "name": "二手交易平台", "url": "/tools/second-hand", "description": "二手物品发布与信用标记。", "tags": ["二手", "交易", "同城"], "featured": true, "status": "active" },
+        { "id": "event-publish-live", "name": "活动发布平台", "url": "/tools/event-publish", "description": "活动创建、报名和签到。", "tags": ["活动", "报名", "签到"], "featured": true, "status": "active" },
+        { "id": "poll-platform-live", "name": "投票调查平台", "url": "/tools/poll-platform", "description": "问卷创建与统计可视。", "tags": ["投票", "问卷", "统计"], "featured": true, "status": "active" },
+        { "id": "confession-wall-live", "name": "表白墙", "url": "/tools/confession-wall", "description": "匿名表白发布与互动。", "tags": ["表白", "匿名", "校园"], "featured": true, "status": "active" },
+        { "id": "wish-list-sharing-live", "name": "愿望清单分享", "url": "/tools/wish-list-sharing", "description": "愿望进度和支持互动。", "tags": ["愿望", "进度", "分享"], "featured": true, "status": "active" },
+        { "id": "daily-photo-live", "name": "每日一图分享", "url": "/tools/daily-photo", "description": "每日图片投稿和展示。", "tags": ["图片", "投稿", "日历"], "featured": true, "status": "active" },
+        { "id": "voice-chat-live", "name": "语音聊天室", "url": "/tools/voice-chat", "description": "语音房间和讨论主题。", "tags": ["语音", "房间", "讨论"], "featured": true, "status": "active" },
+        { "id": "collab-docs-live", "name": "在线协作文档", "url": "/tools/collab-docs", "description": "多人文档编辑、评论和版本记录。", "tags": ["协作", "文档", "版本"], "featured": true, "status": "active" }
       ]
     }
   ]
