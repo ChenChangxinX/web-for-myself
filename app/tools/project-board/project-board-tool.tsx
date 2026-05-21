@@ -47,7 +47,7 @@ const columns: Array<{ key: TaskStatus; name: string }> = [
 ];
 
 export function ProjectBoardTool() {
-  const [tasks, setTasks] = useState<BoardTask[]>([]);
+  const [tasks, setTasks] = useState<BoardTask[]>(() => loadTasks());
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tagsInput, setTagsInput] = useState("feature");
@@ -55,11 +55,6 @@ export function ProjectBoardTool() {
   const [priority, setPriority] = useState<Priority>("medium");
   const [dependsInput, setDependsInput] = useState("");
   const [status, setStatus] = useState("等待创建任务");
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setTasks(loadTasks()), 0);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
