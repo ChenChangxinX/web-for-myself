@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteGrid } from "@/features/site-directory/components/site-grid";
 import { moduleList, modulesBySlug } from "@/lib/modules";
@@ -81,12 +82,21 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   <ul className="mt-1 space-y-1 pl-3">
                     {group.sites.map((site) => (
                       <li key={site.id}>
-                        <a
-                          href={`#group-${group.id}-${site.id}`}
-                          className="block rounded-md px-3 py-1.5 text-xs text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
-                        >
-                          {site.name}
-                        </a>
+                        {site.status === "active" && site.url?.startsWith("/") ? (
+                          <Link
+                            href={site.url}
+                            className="block rounded-md px-3 py-1.5 text-xs text-sky-700 transition hover:bg-slate-100 hover:text-sky-800"
+                          >
+                            {site.name}
+                          </Link>
+                        ) : (
+                          <a
+                            href={`#group-${group.id}-${site.id}`}
+                            className="block rounded-md px-3 py-1.5 text-xs text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+                          >
+                            {site.name}
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>

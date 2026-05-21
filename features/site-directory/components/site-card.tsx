@@ -12,7 +12,15 @@ export function SiteCard({ site }: SiteCardProps) {
   return (
     <article className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="mb-3 flex items-start justify-between gap-4">
-        <h3 className="text-base font-semibold text-slate-900">{site.name}</h3>
+        <h3 className="text-base font-semibold text-slate-900">
+          {!isPlanned && isInternalHref && site.url ? (
+            <Link href={site.url} className="hover:text-sky-700">
+              {site.name}
+            </Link>
+          ) : (
+            site.name
+          )}
+        </h3>
         {isPlanned ? (
           <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">
             规划中

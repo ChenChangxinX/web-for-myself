@@ -33,6 +33,33 @@
           "tags": ["看板", "任务", "拖拽"],
           "featured": true,
           "status": "active"
+        },
+        {
+          "id": "time-tracker-live",
+          "name": "时间追踪工具",
+          "url": "/tools/time-tracker",
+          "description": "记录每天在不同任务上的投入时长，自动汇总周报与月报趋势。",
+          "tags": ["时间追踪", "周报", "分析"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "habit-tracker-live",
+          "name": "习惯追踪器",
+          "url": "/tools/habit-tracker",
+          "description": "追踪多个习惯完成情况，展示养成曲线并支持提醒与伙伴打卡。",
+          "tags": ["习惯", "打卡", "提醒"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "goal-manager-live",
+          "name": "目标管理工具",
+          "url": "/tools/goal-manager",
+          "description": "拆解长期短期目标并追踪进度，支持 OKR 关键结果与达成报告。",
+          "tags": ["目标", "OKR", "报告"],
+          "featured": true,
+          "status": "active"
         }
       ]
     },
@@ -40,27 +67,6 @@
       "id": "roadmap-tools",
       "name": "工作效率路线图",
       "sites": [
-        {
-          "id": "time-tracker",
-          "name": "时间追踪工具",
-          "description": "记录任务耗时并生成周报月报，后续支持自动追踪应用使用时间。",
-          "tags": ["时间追踪", "报表", "分析"],
-          "status": "planned"
-        },
-        {
-          "id": "habit-tracker",
-          "name": "习惯追踪器",
-          "description": "多习惯打卡与趋势曲线，后续加入提醒和朋友互相监督。",
-          "tags": ["习惯", "打卡", "曲线"],
-          "status": "planned"
-        },
-        {
-          "id": "goal-manager",
-          "name": "目标管理工具",
-          "description": "拆解长期目标与短期任务，并扩展 OKR 与达成报告。",
-          "tags": ["目标", "OKR", "进度"],
-          "status": "planned"
-        },
         {
           "id": "reading-list",
           "name": "阅读列表管理",
