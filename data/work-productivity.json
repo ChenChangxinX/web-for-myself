@@ -1,11 +1,11 @@
 {
   "slug": "work-productivity",
   "title": "工作效率",
-  "description": "把 To-do 中的工作效率类项目整理为真实模块页面，先展示已上线工具，再保留完整路线图，方便后续逐个实现。",
+  "description": "把工作效率工具按使用场景分组，便于从目录快速定位具体能力。",
   "groups": [
     {
-      "id": "live-tools",
-      "name": "已上线相关工具",
+      "id": "time-and-focus",
+      "name": "时间与专注",
       "sites": [
         {
           "id": "advanced-pomodoro-live",
@@ -13,24 +13,6 @@
           "url": "/tools/pomodoro-pro",
           "description": "25/5 循环计时、任务记录、每日报告和近 14 天专注日历统计。",
           "tags": ["番茄钟", "统计", "专注"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "meeting-notes-live",
-          "name": "会议记录工具",
-          "url": "/tools/meeting-notes",
-          "description": "会议内容记录、待办提取、自动纪要和浏览器语音转写。",
-          "tags": ["会议", "待办", "纪要"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "project-board-live",
-          "name": "项目进度看板",
-          "url": "/tools/project-board",
-          "description": "任务拖拽、标签、截止日期、优先级和依赖关系管理。",
-          "tags": ["看板", "任务", "拖拽"],
           "featured": true,
           "status": "active"
         },
@@ -53,11 +35,86 @@
           "status": "active"
         },
         {
+          "id": "schedule-assistant-live",
+          "name": "日程安排助手",
+          "url": "/tools/schedule-assistant",
+          "description": "日历视图、提醒与重复事件，结合天气交通信息提供行程建议。",
+          "tags": ["日程", "提醒", "日历"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "focus-mode-live",
+          "name": "专注模式工具",
+          "url": "/tools/focus-mode",
+          "description": "支持黑白名单网站规则，结合番茄钟自动进入专注，并统计分心拦截次数。",
+          "tags": ["专注", "黑名单", "番茄钟"],
+          "featured": true,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "planning-and-execution",
+      "name": "规划与执行",
+      "sites": [
+        {
+          "id": "project-board-live",
+          "name": "项目进度看板",
+          "url": "/tools/project-board",
+          "description": "任务拖拽、标签、截止日期、优先级和依赖关系管理。",
+          "tags": ["看板", "任务", "拖拽"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "goal-manager-live",
           "name": "目标管理工具",
           "url": "/tools/goal-manager",
           "description": "拆解长期短期目标并追踪进度，支持 OKR 关键结果与达成报告。",
           "tags": ["目标", "OKR", "报告"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "quick-launcher-live",
+          "name": "快捷启动器",
+          "url": "/tools/quick-launcher",
+          "description": "快速搜索并启动常用网站和应用，支持快捷键别名与工作空间一键打开。",
+          "tags": ["启动器", "搜索", "工作空间"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "file-organizer-live",
+          "name": "文件整理工具",
+          "url": "/tools/file-organizer",
+          "description": "按类型和日期自动归类文件，支持自定义规则、智能分类和重复文件检测。",
+          "tags": ["文件", "分类", "去重"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "clipboard-history-live",
+          "name": "剪贴板历史管理",
+          "url": "/tools/clipboard-history",
+          "description": "记录剪贴板文本历史，支持快速检索、收藏与格式化粘贴。",
+          "tags": ["剪贴板", "历史", "格式化"],
+          "featured": true,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-and-notes",
+      "name": "知识与笔记",
+      "sites": [
+        {
+          "id": "meeting-notes-live",
+          "name": "会议记录工具",
+          "url": "/tools/meeting-notes",
+          "description": "会议内容记录、待办提取、自动纪要和浏览器语音转写。",
+          "tags": ["会议", "待办", "纪要"],
           "featured": true,
           "status": "active"
         },
@@ -80,24 +137,6 @@
           "status": "active"
         },
         {
-          "id": "schedule-assistant-live",
-          "name": "日程安排助手",
-          "url": "/tools/schedule-assistant",
-          "description": "日历视图、提醒与重复事件，结合天气交通信息提供行程建议。",
-          "tags": ["日程", "提醒", "日历"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "focus-mode-live",
-          "name": "专注模式工具",
-          "url": "/tools/focus-mode",
-          "description": "支持黑白名单网站规则，结合番茄钟自动进入专注，并统计分心拦截次数。",
-          "tags": ["专注", "黑名单", "番茄钟"],
-          "featured": true,
-          "status": "active"
-        },
-        {
           "id": "quick-notes-live",
           "name": "快速笔记工具",
           "url": "/tools/quick-notes",
@@ -105,7 +144,13 @@
           "tags": ["笔记", "Markdown", "双链"],
           "featured": true,
           "status": "active"
-        },
+        }
+      ]
+    },
+    {
+      "id": "communication-and-collaboration",
+      "name": "沟通与协作",
+      "sites": [
         {
           "id": "mail-templates-live",
           "name": "邮件模板管理",
@@ -116,38 +161,26 @@
           "status": "active"
         },
         {
+          "id": "team-whiteboard-live",
+          "name": "团队协作和白板",
+          "url": "/tools/team-whiteboard",
+          "description": "在线白板绘制、便签与模板，支持操作回放记录讨论过程。",
+          "tags": ["白板", "协作", "回放"],
+          "featured": true,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "business-and-customer",
+      "name": "业务与客户",
+      "sites": [
+        {
           "id": "password-manager-live",
           "name": "密码管理器",
           "url": "/tools/password-manager",
           "description": "本地加密保存账号密码，支持分类搜索、强度检测、随机强密码生成和安全分享。",
           "tags": ["密码", "安全", "生成器"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "file-organizer-live",
-          "name": "文件整理工具",
-          "url": "/tools/file-organizer",
-          "description": "按类型和日期自动归类文件，支持自定义规则、智能分类和重复文件检测。",
-          "tags": ["文件", "分类", "去重"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "quick-launcher-live",
-          "name": "快捷启动器",
-          "url": "/tools/quick-launcher",
-          "description": "快速搜索并启动常用网站和应用，支持快捷键别名与工作空间一键打开。",
-          "tags": ["启动器", "搜索", "工作空间"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "clipboard-history-live",
-          "name": "剪贴板历史管理",
-          "url": "/tools/clipboard-history",
-          "description": "记录剪贴板文本历史，支持快速检索、收藏与格式化粘贴。",
-          "tags": ["剪贴板", "历史", "格式化"],
           "featured": true,
           "status": "active"
         },
@@ -177,23 +210,7 @@
           "tags": ["CRM", "客户", "跟进"],
           "featured": true,
           "status": "active"
-        },
-        {
-          "id": "team-whiteboard-live",
-          "name": "团队协作和白板",
-          "url": "/tools/team-whiteboard",
-          "description": "在线白板绘制、便签与模板，支持操作回放记录讨论过程。",
-          "tags": ["白板", "协作", "回放"],
-          "featured": true,
-          "status": "active"
         }
-      ]
-    },
-    {
-      "id": "roadmap-tools",
-      "name": "工作效率路线图",
-      "sites": [
-
       ]
     }
   ]
