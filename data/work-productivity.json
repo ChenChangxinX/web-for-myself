@@ -87,6 +87,33 @@
           "tags": ["日程", "提醒", "日历"],
           "featured": true,
           "status": "active"
+        },
+        {
+          "id": "focus-mode-live",
+          "name": "专注模式工具",
+          "url": "/tools/focus-mode",
+          "description": "支持黑白名单网站规则，结合番茄钟自动进入专注，并统计分心拦截次数。",
+          "tags": ["专注", "黑名单", "番茄钟"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "quick-notes-live",
+          "name": "快速笔记工具",
+          "url": "/tools/quick-notes",
+          "description": "轻量 Markdown 笔记，支持标签搜索、导出与双链关联。",
+          "tags": ["笔记", "Markdown", "双链"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "mail-templates-live",
+          "name": "邮件模板管理",
+          "url": "/tools/mail-templates",
+          "description": "管理常用邮件模板，支持变量替换、智能变量和团队模板导入导出。",
+          "tags": ["邮件", "模板", "变量"],
+          "featured": true,
+          "status": "active"
         }
       ]
     },
@@ -94,27 +121,6 @@
       "id": "roadmap-tools",
       "name": "工作效率路线图",
       "sites": [
-        {
-          "id": "focus-mode",
-          "name": "专注模式工具",
-          "description": "屏蔽干扰网站，支持黑白名单，并预留番茄钟联动与分心统计。",
-          "tags": ["专注", "网站屏蔽", "统计"],
-          "status": "planned"
-        },
-        {
-          "id": "quick-notes",
-          "name": "快速笔记工具",
-          "description": "轻量 Markdown 笔记、标签和导出，后续支持全局快捷键与双链笔记。",
-          "tags": ["笔记", "Markdown", "轻量"],
-          "status": "planned"
-        },
-        {
-          "id": "mail-templates",
-          "name": "邮件模板管理",
-          "description": "常用模板一键插入，支持变量替换、智能变量和团队共享。",
-          "tags": ["邮件", "模板", "变量"],
-          "status": "planned"
-        },
         {
           "id": "password-manager",
           "name": "密码管理器",
