@@ -1,151 +1,191 @@
 {
   "slug": "creative-fun",
   "title": "娱乐创意",
-  "description": "把娱乐创意类项目分成已上线的可玩工具与完整创意清单，后续可以从这里继续孵化新玩法。",
+  "description": "把娱乐创意灵感做成可直接体验的工具，覆盖创作、游戏、记录与轻娱乐场景。",
   "groups": [
     {
-      "id": "roadmap-tools",
-      "name": "娱乐创意路线图",
+      "id": "creative-live-tools",
+      "name": "已上线娱乐创意工具",
       "sites": [
         {
-          "id": "meme-maker",
+          "id": "meme-maker-live",
           "name": "表情包制作器",
-          "description": "上传图片加文字生成表情包，后续扩展热门模板库和 GIF 制作。",
+          "url": "/tools/meme-maker",
+          "description": "上传图片添加文案，快速生成表情包，内置模板和动图灵感。",
           "tags": ["表情包", "模板", "GIF"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "avatar-generator",
+          "id": "avatar-generator-live",
           "name": "头像生成器",
-          "description": "根据名字或关键词生成头像，并规划卡通、像素、水彩等多风格批量输出。",
+          "url": "/tools/avatar-generator",
+          "description": "根据关键词生成多风格头像方案，支持批量导出灵感。",
           "tags": ["头像", "生成", "风格化"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "quote-generator",
+          "id": "quote-generator-live",
           "name": "名言生成器",
-          "description": "随机励志或搞笑语录，后续加入主题生成和名言配图。",
+          "url": "/tools/quote-generator",
+          "description": "随机励志或搞笑语录，支持主题创作和分享。",
           "tags": ["名言", "文案", "分享"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "zodiac-fortune",
+          "id": "zodiac-fortune-live",
           "name": "星座运势查询",
-          "description": "每日运势、爱情事业财运，并扩展星座配对和星座科普。",
+          "url": "/tools/zodiac-fortune",
+          "description": "查看每日运势与星座配对，含星座知识小卡片。",
           "tags": ["星座", "运势", "配对"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "fortune-stick",
+          "id": "fortune-stick-live",
           "name": "抽签工具",
-          "description": "自定义签文与抽签体验，后续扩展 AI 解签和许愿记录。",
+          "url": "/tools/fortune-stick",
+          "description": "在线抽签与签文解读，支持许愿与愿望追踪。",
           "tags": ["抽签", "签文", "许愿"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "guess-number",
+          "id": "guess-number-live",
           "name": "猜数字游戏",
-          "description": "经典随机数字挑战，规划难度选择和排行榜。",
+          "url": "/tools/guess-number",
+          "description": "经典猜数字挑战，支持难度和成绩记录。",
           "tags": ["游戏", "猜数字", "排行榜"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "typing-speed",
+          "id": "typing-speed-live",
           "name": "打字速度测试",
-          "description": "测试速度与准确率，后续加入练习模式和代码打字。",
+          "url": "/tools/typing-speed",
+          "description": "测试打字速度和准确率，内置练习与代码模式。",
           "tags": ["打字", "练习", "测试"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "memory-game",
+          "id": "memory-game-live",
           "name": "记忆力游戏",
-          "description": "翻牌配对玩法，后续支持多主题与多人对战。",
+          "url": "/tools/memory-game",
+          "description": "翻牌配对训练记忆力，支持多主题难度。",
           "tags": ["记忆", "翻牌", "对战"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "jigsaw-game",
+          "id": "jigsaw-game-live",
           "name": "拼图游戏",
-          "description": "上传图片生成拼图，规划计时挑战与 3D 拼图玩法。",
+          "url": "/tools/jigsaw-game",
+          "description": "上传图片并切分拼图，支持计时挑战。",
           "tags": ["拼图", "上传图片", "挑战"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "music-player",
+          "id": "music-player-live",
           "name": "音乐播放器",
-          "description": "播放列表、歌词和进度控制，后续加入音乐可视化和推荐。",
+          "url": "/tools/music-player",
+          "description": "本地播放列表、歌词备注、进度控制与可视化。",
           "tags": ["音乐", "播放", "可视化"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "movie-recommender",
+          "id": "movie-recommender-live",
           "name": "电影推荐工具",
-          "description": "根据偏好推荐影片，规划评分收藏、AI 推荐和豆瓣信息接入。",
+          "url": "/tools/movie-recommender",
+          "description": "按偏好推荐电影，支持评分收藏与推荐理由。",
           "tags": ["电影", "推荐", "评分"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "recipe-sharing",
+          "id": "recipe-sharing-live",
           "name": "美食食谱分享",
-          "description": "分享和搜索食谱，后续支持购物清单和营养分析。",
+          "url": "/tools/recipe-sharing",
+          "description": "收藏和检索食谱，生成购物清单并查看营养估算。",
           "tags": ["食谱", "收藏", "营养"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "travel-diary",
+          "id": "travel-diary-live",
           "name": "旅行日记",
-          "description": "记录旅行照片与地点，规划路线轨迹和旅行相册自动排版。",
+          "url": "/tools/travel-diary",
+          "description": "记录旅行足迹和照片，生成路线时间线。",
           "tags": ["旅行", "地图", "相册"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "pet-diary",
+          "id": "pet-diary-live",
           "name": "宠物日记",
-          "description": "记录体重、疫苗和日常，后续支持健康提醒和多宠管理。",
+          "url": "/tools/pet-diary",
+          "description": "记录宠物日常、体重和疫苗提醒，支持多宠管理。",
           "tags": ["宠物", "健康", "提醒"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "mood-diary",
+          "id": "mood-diary-live",
           "name": "心情日记",
-          "description": "用颜色和表情记录每日心情，并扩展情绪分析和分享。",
+          "url": "/tools/mood-diary",
+          "description": "记录每日情绪并生成趋势图，附情绪分析建议。",
           "tags": ["心情", "日记", "曲线"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "dream-recorder",
+          "id": "dream-recorder-live",
           "name": "梦境记录器",
-          "description": "记录梦境与标签搜索，并规划梦境解析和关键词统计。",
+          "url": "/tools/dream-recorder",
+          "description": "记录梦境并按标签检索，分析关键词与主题。",
           "tags": ["梦境", "记录", "分析"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "story-generator",
+          "id": "story-generator-live",
           "name": "随机故事生成器",
-          "description": "输入关键词生成故事，预留续写和多结局能力。",
+          "url": "/tools/story-generator",
+          "description": "输入关键词生成多风格短故事并支持续写。",
           "tags": ["故事", "创作", "AI"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "poetry-generator",
+          "id": "poetry-generator-live",
           "name": "诗歌生成器",
-          "description": "按主题生成不同风格诗歌，后续扩展押韵检测。",
+          "url": "/tools/poetry-generator",
+          "description": "根据主题生成古风、现代等诗体并做押韵提示。",
           "tags": ["诗歌", "古风", "押韵"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "virtual-pet",
+          "id": "virtual-pet-live",
           "name": "虚拟宠物养成",
-          "description": "喂食、升级和互动养成，并规划多宠选择和宠物对战。",
+          "url": "/tools/virtual-pet",
+          "description": "喂食、玩耍、升级的虚拟宠物互动工具。",
           "tags": ["宠物", "养成", "对战"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         },
         {
-          "id": "doodle-board",
+          "id": "doodle-board-live",
           "name": "在线涂鸦板",
-          "description": "简单画板、颜色和橡皮擦，后续加入图层和多人协作。",
+          "url": "/tools/doodle-board",
+          "description": "在线画板支持画笔、颜色、橡皮和保存分享。",
           "tags": ["涂鸦", "绘画", "协作"],
-          "status": "planned"
+          "featured": true,
+          "status": "active"
         }
       ]
     }
