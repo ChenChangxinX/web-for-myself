@@ -18,7 +18,13 @@ export function SiteGrid({ groups, sectionIdPrefix }: SiteGridProps) {
           <h2 className="text-xl font-bold tracking-tight text-slate-900">{group.name}</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {group.sites.map((site) => (
-              <SiteCard key={site.id} site={site} />
+              <div
+                key={site.id}
+                id={sectionIdPrefix ? `${sectionIdPrefix}-${group.id}-${site.id}` : undefined}
+                className="scroll-mt-24"
+              >
+                <SiteCard site={site} />
+              </div>
             ))}
           </div>
         </section>

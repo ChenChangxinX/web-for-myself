@@ -79,6 +79,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                       <span>{group.name}</span>
                       <span className="text-xs text-slate-400">{group.sites.length}</span>
                     </a>
+                    <ul className="mt-1 space-y-1 pl-3">
+                      {group.sites.map((site) => (
+                        <li key={site.id}>
+                          <a
+                            href={`#group-${group.id}-${site.id}`}
+                            className="block rounded-md px-3 py-1.5 text-xs text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+                          >
+                            {site.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))}
               </ul>
