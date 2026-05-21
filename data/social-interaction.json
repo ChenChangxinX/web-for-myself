@@ -4,39 +4,6 @@
   "description": "社交互动模块先沉淀完整产品方向，保留可复用的基础工具，同时把 To-do 中的社交类项目拆成结构化路线图。",
   "groups": [
     {
-      "id": "live-tools",
-      "name": "已上线可复用基础工具",
-      "sites": [
-        {
-          "id": "qr-generator-social",
-          "name": "二维码生成器",
-          "url": "/tools/qr-generator",
-          "description": "适合分享链接、名片信息、活动海报，支持批量生成和摄像头扫码。",
-          "tags": ["分享", "扫码", "活动"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "markdown-to-html-social",
-          "name": "Markdown 转 HTML",
-          "url": "/tools/markdown-to-html",
-          "description": "可用于博客、社区文章和说明文档发布的基础内容工具。",
-          "tags": ["博客", "内容发布", "文档"],
-          "featured": false,
-          "status": "active"
-        },
-        {
-          "id": "image-compressor-social",
-          "name": "图片压缩工具",
-          "url": "/tools/image-compressor",
-          "description": "社交内容发图前可先压缩、转换格式和基础裁剪。",
-          "tags": ["图片", "压缩", "分享"],
-          "featured": false,
-          "status": "active"
-        }
-      ]
-    },
-    {
       "id": "roadmap-tools",
       "name": "社交互动路线图",
       "sites": [

@@ -33,60 +33,6 @@
           "tags": ["看板", "任务", "拖拽"],
           "featured": true,
           "status": "active"
-        },
-        {
-          "id": "countdown-tool-work",
-          "name": "倒计时工具",
-          "url": "/tools/countdown-tool",
-          "description": "支持多个倒计时和正计时，带浏览器提醒，适合考试、项目节点和纪念日管理。",
-          "tags": ["提醒", "计划", "时间管理"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "unit-converter-work",
-          "name": "单位转换器",
-          "url": "/tools/unit-converter",
-          "description": "长度、重量、温度和货币转换，支持汇率更新和自定义单位。",
-          "tags": ["转换", "汇率", "效率"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "regex-tester-work",
-          "name": "正则表达式测试器",
-          "url": "/tools/regex-tester",
-          "description": "实时匹配高亮、模板、解释和生成器，适合文本处理与开发调试。",
-          "tags": ["正则", "开发", "调试"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "markdown-to-html-work",
-          "name": "Markdown 转 HTML",
-          "url": "/tools/markdown-to-html",
-          "description": "实时预览、代码高亮、主题切换，并支持导出 HTML、Word 和打印为 PDF。",
-          "tags": ["Markdown", "文档", "导出"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "json-formatter-work",
-          "name": "JSON 格式化工具",
-          "url": "/tools/json-formatter",
-          "description": "格式化、校验、树形查看、JSONPath 查询以及 YAML/XML 转换。",
-          "tags": ["JSON", "格式化", "API"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "base64-tool-work",
-          "name": "Base64 编解码",
-          "url": "/tools/base64-tool",
-          "description": "文本和图片 Base64 处理、图片预览、批量编码及 URL/Unicode 转换。",
-          "tags": ["编码", "文件", "接口调试"],
-          "featured": false,
-          "status": "active"
         }
       ]
     },

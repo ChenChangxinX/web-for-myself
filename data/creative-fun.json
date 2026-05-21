@@ -4,57 +4,6 @@
   "description": "把娱乐创意类项目分成已上线的可玩工具与完整创意清单，后续可以从这里继续孵化新玩法。",
   "groups": [
     {
-      "id": "live-tools",
-      "name": "已上线创意工具",
-      "sites": [
-        {
-          "id": "random-decision-fun",
-          "name": "随机决策器",
-          "url": "/tools/random-decision",
-          "description": "多选项随机抽取，支持权重和历史记录，适合吃什么、去哪玩等场景。",
-          "tags": ["随机", "选择", "娱乐"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "color-picker-fun",
-          "name": "颜色选择器",
-          "url": "/tools/color-picker",
-          "description": "HEX/RGB/HSL 转换、配色推荐、调色板保存和图片取色。",
-          "tags": ["颜色", "配色", "设计"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "image-editor-fun",
-          "name": "图片编辑器",
-          "url": "/tools/image-editor",
-          "description": "批量读取 EXIF 时间与位置并叠加到图片中，支持样式统一处理。",
-          "tags": ["图片", "EXIF", "创作"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "image-compressor-fun",
-          "name": "图片压缩工具",
-          "url": "/tools/image-compressor",
-          "description": "批量压缩、格式转换、中心裁剪和旋转，适合创作素材快速处理。",
-          "tags": ["压缩", "格式转换", "图片"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "qr-generator-fun",
-          "name": "二维码生成器",
-          "url": "/tools/qr-generator",
-          "description": "自定义颜色、Logo、扫码与批量生成，适合活动海报和创意分享。",
-          "tags": ["二维码", "海报", "分享"],
-          "featured": false,
-          "status": "active"
-        }
-      ]
-    },
-    {
       "id": "roadmap-tools",
       "name": "娱乐创意路线图",
       "sites": [

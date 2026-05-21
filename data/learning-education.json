@@ -4,57 +4,6 @@
   "description": "学习教育模块现在会展示已可直接使用的学习辅助工具，以及从 To-do 拆出来的完整学习路线图。",
   "groups": [
     {
-      "id": "live-tools",
-      "name": "已上线学习辅助工具",
-      "sites": [
-        {
-          "id": "image-to-text-learning",
-          "name": "图片转文字",
-          "url": "/tools/image-to-text",
-          "description": "上传截图或讲义照片自动 OCR 识别文字，适合整理课堂内容和题目。",
-          "tags": ["OCR", "题目提取", "学习"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "countdown-tool-learning",
-          "name": "倒计时工具",
-          "url": "/tools/countdown-tool",
-          "description": "适合考试、截止日期和复习阶段管理，支持多个倒计时和提醒。",
-          "tags": ["考试", "提醒", "时间规划"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "markdown-to-html-learning",
-          "name": "Markdown 转 HTML",
-          "url": "/tools/markdown-to-html",
-          "description": "适合学习笔记和课程文档整理，支持高亮、主题和导出。",
-          "tags": ["笔记", "Markdown", "导出"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "json-formatter-learning",
-          "name": "JSON 格式化工具",
-          "url": "/tools/json-formatter",
-          "description": "适合编程学习与接口练习，支持校验、树视图和 JSONPath。",
-          "tags": ["编程", "JSON", "练习"],
-          "featured": false,
-          "status": "active"
-        },
-        {
-          "id": "regex-tester-learning",
-          "name": "正则表达式测试器",
-          "url": "/tools/regex-tester",
-          "description": "适合练习文本匹配与规则表达，内置模板和生成器。",
-          "tags": ["正则", "文本", "练习"],
-          "featured": false,
-          "status": "active"
-        }
-      ]
-    },
-    {
       "id": "roadmap-tools",
       "name": "学习教育路线图",
       "sites": [
