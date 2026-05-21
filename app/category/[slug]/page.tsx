@@ -64,7 +64,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <p className="mt-3 max-w-3xl text-slate-600">{moduleData.description}</p>
       </section>
 
-      <SiteGrid groups={moduleData.groups} />
+      {slug === "personal-tools" ? (
+        <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+          <aside className="lg:sticky lg:top-24 lg:h-fit">
+            <nav className="rounded-2xl border border-black/10 bg-white/90 p-4 shadow-sm">
+              <p className="text-sm font-semibold text-slate-900">目录</p>
+              <ul className="mt-3 space-y-2">
+                {moduleData.groups.map((group) => (
+                  <li key={group.id}>
+                    <a
+                      href={`#group-${group.id}`}
+                      className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                    >
+                      <span>{group.name}</span>
+                      <span className="text-xs text-slate-400">{group.sites.length}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          <SiteGrid groups={moduleData.groups} sectionIdPrefix="group" />
+        </div>
+      ) : (
+        <SiteGrid groups={moduleData.groups} />
+      )}
     </div>
   );
 }
