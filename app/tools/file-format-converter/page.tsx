@@ -3,7 +3,7 @@ import { FileFormatConverterTool } from "./file-format-converter-tool";
 
 export const metadata: Metadata = {
   title: "文件格式转换 | 个人工具",
-  description: "支持 JSON/YAML/CSV 文本互转，包含批量文本转换模式。",
+  description: "支持 PDF 转图片、图片格式转换、视频转 WebM 以及批量处理与云端任务上传。",
 };
 
 export default function FileFormatConverterPage() {
@@ -15,7 +15,7 @@ export default function FileFormatConverterPage() {
         </p>
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">文件格式转换</h1>
         <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-          先提供常用文本格式转换：JSON、YAML、CSV。支持单条转换与批量行转换，后续可继续扩展文件级转换能力。
+          支持常见文件格式转换：PDF 转图片、图片格式互转、视频格式转换。提供批量处理能力，并支持将任务上传到云端转换服务处理大文件。
         </p>
       </section>
 

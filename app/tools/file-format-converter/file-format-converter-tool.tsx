@@ -1,256 +1,507 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { dump, load } from "js-yaml";
+import JSZip from "jszip";
 
-type Mode = "json-to-yaml" | "yaml-to-json" | "csv-to-json" | "json-to-csv";
+type Tab = "pdf" | "image" | "video" | "cloud";
+type ImageOutputType = "image/png" | "image/jpeg" | "image/webp";
 
-function parseCsvLine(line: string): string[] {
-  const result: string[] = [];
-  let current = "";
-  let inQuotes = false;
+function normalizeFileBaseName(name: string): string {
+  return name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_\u4e00-\u9fa5]/g, "_");
+}
 
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i += 1;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (char === "," && !inQuotes) {
-      result.push(current.trim());
-      current = "";
-    } else {
-      current += char;
-    }
+function outputExtension(type: ImageOutputType): string {
+  if (type === "image/jpeg") {
+    return "jpg";
+  }
+  if (type === "image/webp") {
+    return "webp";
+  }
+  return "png";
+}
+
+function downloadBlob(blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, type: ImageOutputType, quality: number): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("导出失败"));
+          return;
+        }
+        resolve(blob);
+      },
+      type,
+      quality,
+    );
+  });
+}
+
+async function convertVideoToWebm(file: File, fps: number): Promise<Blob> {
+  const sourceUrl = URL.createObjectURL(file);
+  const video = document.createElement("video");
+  video.src = sourceUrl;
+  video.muted = true;
+  video.playsInline = true;
+
+  await new Promise<void>((resolve, reject) => {
+    video.onloadedmetadata = () => resolve();
+    video.onerror = () => reject(new Error("视频加载失败"));
+  });
+
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    URL.revokeObjectURL(sourceUrl);
+    throw new Error("无法初始化画布");
   }
 
-  result.push(current.trim());
+  const canvasStream = canvas.captureStream(fps);
+  const capturedVideoStream = (video as HTMLVideoElement & { captureStream: () => MediaStream }).captureStream();
+  const mixedStream = new MediaStream([...canvasStream.getVideoTracks(), ...capturedVideoStream.getAudioTracks()]);
+
+  const mimeType = MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus")
+    ? "video/webm;codecs=vp9,opus"
+    : "video/webm";
+
+  const recorder = new MediaRecorder(mixedStream, { mimeType });
+  const chunks: Blob[] = [];
+  recorder.ondataavailable = (event) => {
+    if (event.data.size > 0) {
+      chunks.push(event.data);
+    }
+  };
+
+  const stopped = new Promise<Blob>((resolve) => {
+    recorder.onstop = () => {
+      resolve(new Blob(chunks, { type: "video/webm" }));
+    };
+  });
+
+  recorder.start(1000);
+  await video.play();
+
+  await new Promise<void>((resolve) => {
+    const draw = () => {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      if (video.ended || video.paused) {
+        resolve();
+        return;
+      }
+      requestAnimationFrame(draw);
+    };
+    draw();
+  });
+
+  recorder.stop();
+  const result = await stopped;
+  mixedStream.getTracks().forEach((track) => track.stop());
+  URL.revokeObjectURL(sourceUrl);
   return result;
 }
 
-function csvToJson(input: string): string {
-  const rows = input
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  if (rows.length < 2) {
-    throw new Error("CSV 至少需要表头和一行数据");
-  }
-
-  const headers = parseCsvLine(rows[0]);
-  const data = rows.slice(1).map((row) => {
-    const cells = parseCsvLine(row);
-    const item: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      item[header] = cells[index] ?? "";
-    });
-    return item;
-  });
-
-  return JSON.stringify(data, null, 2);
-}
-
-function escapeCsvValue(value: unknown): string {
-  const normalized = String(value ?? "");
-  if (normalized.includes(",") || normalized.includes('"') || normalized.includes("\n")) {
-    return `"${normalized.replaceAll('"', '""')}"`;
-  }
-  return normalized;
-}
-
-function jsonToCsv(input: string): string {
-  const parsed = JSON.parse(input) as unknown;
-  if (!Array.isArray(parsed) || parsed.length === 0 || typeof parsed[0] !== "object" || parsed[0] === null) {
-    throw new Error("JSON 转 CSV 需要对象数组，例如 [{\"name\":\"A\"}]");
-  }
-
-  const rows = parsed as Record<string, unknown>[];
-  const headers = Array.from(new Set(rows.flatMap((row) => Object.keys(row))));
-  const headerLine = headers.map(escapeCsvValue).join(",");
-  const dataLines = rows.map((row) => headers.map((header) => escapeCsvValue(row[header])).join(","));
-  return [headerLine, ...dataLines].join("\n");
-}
-
-function convertText(mode: Mode, input: string): string {
-  if (mode === "json-to-yaml") {
-    const jsonObject = JSON.parse(input) as unknown;
-    return dump(jsonObject, { indent: 2, noRefs: true }).trim();
-  }
-
-  if (mode === "yaml-to-json") {
-    const yamlObject = load(input);
-    return JSON.stringify(yamlObject, null, 2);
-  }
-
-  if (mode === "csv-to-json") {
-    return csvToJson(input);
-  }
-
-  return jsonToCsv(input);
-}
-
-const modeLabel: Record<Mode, string> = {
-  "json-to-yaml": "JSON -> YAML",
-  "yaml-to-json": "YAML -> JSON",
-  "csv-to-json": "CSV -> JSON",
-  "json-to-csv": "JSON -> CSV",
-};
-
 export function FileFormatConverterTool() {
-  const [mode, setMode] = useState<Mode>("json-to-yaml");
-  const [input, setInput] = useState('{\n  "name": "Alice",\n  "role": "developer"\n}');
-  const [output, setOutput] = useState("");
-  const [batchInput, setBatchInput] = useState("");
-  const [batchOutput, setBatchOutput] = useState("");
-  const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState<Tab>("pdf");
 
-  const placeholder = useMemo(() => {
-    if (mode === "yaml-to-json") {
-      return "name: Alice\nrole: developer";
-    }
-    if (mode === "csv-to-json") {
-      return "name,role\nAlice,developer\nBob,designer";
-    }
-    if (mode === "json-to-csv") {
-      return '[{"name":"Alice","role":"developer"}]';
-    }
-    return '{\n  "name": "Alice",\n  "role": "developer"\n}';
-  }, [mode]);
+  const [pdfFiles, setPdfFiles] = useState<File[]>([]);
+  const [pdfScale, setPdfScale] = useState(1.5);
+  const [pdfOutputType, setPdfOutputType] = useState<ImageOutputType>("image/png");
 
-  function runConvert() {
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageOutputType, setImageOutputType] = useState<ImageOutputType>("image/webp");
+  const [imageQuality, setImageQuality] = useState(0.9);
+
+  const [videoFiles, setVideoFiles] = useState<File[]>([]);
+  const [videoFps, setVideoFps] = useState(24);
+
+  const [cloudFiles, setCloudFiles] = useState<File[]>([]);
+  const [cloudEndpoint, setCloudEndpoint] = useState("");
+  const [cloudToken, setCloudToken] = useState("");
+
+  const [status, setStatus] = useState("准备就绪");
+  const [busy, setBusy] = useState(false);
+
+  const pdfHint = useMemo(() => {
+    const ext = outputExtension(pdfOutputType);
+    return `输出格式：${ext.toUpperCase()}，分辨率倍率：${pdfScale.toFixed(1)}x`;
+  }, [pdfOutputType, pdfScale]);
+
+  async function convertPdfToImages() {
+    if (pdfFiles.length === 0) {
+      setStatus("请先选择 PDF 文件");
+      return;
+    }
+
+    setBusy(true);
+    setStatus("正在解析 PDF 并转换为图片...");
+
     try {
-      const result = convertText(mode, input);
-      setOutput(result);
-      setError("");
-    } catch (conversionError) {
-      setError(conversionError instanceof Error ? conversionError.message : "转换失败");
-      setOutput("");
-    }
-  }
-
-  function runBatchConvert() {
-    const items = batchInput
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean);
-
-    if (items.length === 0) {
-      setBatchOutput("");
-      return;
-    }
-
-    const converted = items.map((item, index) => {
-      try {
-        return `#${index + 1}\n${convertText(mode, item)}`;
-      } catch (conversionError) {
-        const message = conversionError instanceof Error ? conversionError.message : "转换失败";
-        return `#${index + 1}\nERROR: ${message}`;
+      const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+      if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
       }
-    });
 
-    setBatchOutput(converted.join("\n\n"));
+      const zip = new JSZip();
+      for (const file of pdfFiles) {
+        const data = new Uint8Array(await file.arrayBuffer());
+        const task = pdfjs.getDocument({ data });
+        const pdf = await task.promise;
+        const folder = zip.folder(normalizeFileBaseName(file.name));
+
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+          const page = await pdf.getPage(pageNumber);
+          const viewport = page.getViewport({ scale: pdfScale });
+          const canvas = document.createElement("canvas");
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const context = canvas.getContext("2d");
+          if (!context) {
+            throw new Error("PDF 画布初始化失败");
+          }
+
+          await page.render({ canvas, canvasContext: context, viewport }).promise;
+          const blob = await canvasToBlob(canvas, pdfOutputType, 0.92);
+          folder?.file(`page-${String(pageNumber).padStart(3, "0")}.${outputExtension(pdfOutputType)}`, blob);
+        }
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      downloadBlob(zipBlob, `pdf-to-images-${Date.now()}.zip`);
+      setStatus(`转换完成：共处理 ${pdfFiles.length} 个 PDF`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "PDF 转换失败");
+    } finally {
+      setBusy(false);
+    }
   }
 
-  async function copyOutput(value: string) {
-    if (!value.trim()) {
+  async function convertImages() {
+    if (imageFiles.length === 0) {
+      setStatus("请先选择图片文件");
       return;
     }
-    await navigator.clipboard.writeText(value);
+
+    setBusy(true);
+    setStatus("正在转换图片格式...");
+
+    try {
+      const zip = new JSZip();
+
+      for (const file of imageFiles) {
+        const bitmap = await createImageBitmap(file);
+        const canvas = document.createElement("canvas");
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        const context = canvas.getContext("2d");
+        if (!context) {
+          throw new Error("图片画布初始化失败");
+        }
+
+        context.drawImage(bitmap, 0, 0);
+        const blob = await canvasToBlob(canvas, imageOutputType, imageQuality);
+        zip.file(`${normalizeFileBaseName(file.name)}.${outputExtension(imageOutputType)}`, blob);
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      downloadBlob(zipBlob, `image-convert-${Date.now()}.zip`);
+      setStatus(`转换完成：共处理 ${imageFiles.length} 张图片`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "图片转换失败");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function convertVideos() {
+    if (videoFiles.length === 0) {
+      setStatus("请先选择视频文件");
+      return;
+    }
+
+    setBusy(true);
+    setStatus("正在转换视频为 WebM，视频越长耗时越久...");
+
+    try {
+      const zip = new JSZip();
+      let index = 0;
+      for (const file of videoFiles) {
+        index += 1;
+        setStatus(`正在处理第 ${index}/${videoFiles.length} 个视频...`);
+        const webmBlob = await convertVideoToWebm(file, videoFps);
+        zip.file(`${normalizeFileBaseName(file.name)}.webm`, webmBlob);
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      downloadBlob(zipBlob, `video-convert-${Date.now()}.zip`);
+      setStatus(`转换完成：共处理 ${videoFiles.length} 个视频`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "视频转换失败");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function uploadCloudTask() {
+    if (!cloudEndpoint.trim()) {
+      setStatus("请输入云端转换接口地址");
+      return;
+    }
+    if (cloudFiles.length === 0) {
+      setStatus("请先选择要上传的文件");
+      return;
+    }
+
+    setBusy(true);
+    setStatus("正在上传云端转换任务...");
+
+    try {
+      const formData = new FormData();
+      cloudFiles.forEach((file) => formData.append("files", file));
+      formData.append("tool", "file-format-converter");
+      formData.append("hint", "batch-convert-large-files");
+
+      const headers: HeadersInit = {};
+      if (cloudToken.trim()) {
+        headers.Authorization = `Bearer ${cloudToken.trim()}`;
+      }
+
+      const response = await fetch(cloudEndpoint.trim(), {
+        method: "POST",
+        body: formData,
+        headers,
+      });
+
+      const responseText = await response.text();
+      if (!response.ok) {
+        throw new Error(`云端任务失败（${response.status}）：${responseText.slice(0, 160)}`);
+      }
+
+      setStatus(`云端任务提交成功：${responseText.slice(0, 180) || "已接收"}`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "云端任务提交失败");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
-    <section className="grid gap-6 lg:grid-cols-2">
-      <article className="space-y-4 rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-900">单条转换</h2>
-        <label className="text-sm font-semibold text-slate-700" htmlFor="mode-select">
-          转换模式
-        </label>
-        <select
-          id="mode-select"
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
-          value={mode}
-          onChange={(event) => setMode(event.target.value as Mode)}
+    <section className="space-y-6">
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setActiveTab("pdf")}
+          className={`rounded-xl px-4 py-2 text-sm font-semibold ${activeTab === "pdf" ? "bg-indigo-600 text-white" : "border border-slate-300 text-slate-700"}`}
         >
-          {(Object.keys(modeLabel) as Mode[]).map((item) => (
-            <option key={item} value={item}>
-              {modeLabel[item]}
-            </option>
-          ))}
-        </select>
+          PDF 转图片
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("image")}
+          className={`rounded-xl px-4 py-2 text-sm font-semibold ${activeTab === "image" ? "bg-indigo-600 text-white" : "border border-slate-300 text-slate-700"}`}
+        >
+          图片格式转换
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("video")}
+          className={`rounded-xl px-4 py-2 text-sm font-semibold ${activeTab === "video" ? "bg-indigo-600 text-white" : "border border-slate-300 text-slate-700"}`}
+        >
+          视频格式转换
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("cloud")}
+          className={`rounded-xl px-4 py-2 text-sm font-semibold ${activeTab === "cloud" ? "bg-indigo-600 text-white" : "border border-slate-300 text-slate-700"}`}
+        >
+          云端转换
+        </button>
+      </div>
 
-        <textarea
-          className="h-52 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm"
-          value={input}
-          placeholder={placeholder}
-          onChange={(event) => setInput(event.target.value)}
-        />
+      {activeTab === "pdf" ? (
+        <article className="space-y-4 rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900">PDF -&gt; 图片（批量）</h2>
+          <input
+            type="file"
+            accept="application/pdf"
+            multiple
+            onChange={(event) => setPdfFiles(Array.from(event.target.files ?? []))}
+            className="block w-full text-sm"
+          />
 
-        <div className="flex flex-wrap gap-3">
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm text-slate-700">
+              输出格式
+              <select
+                className="w-full rounded-xl border border-slate-200 px-3 py-2"
+                value={pdfOutputType}
+                onChange={(event) => setPdfOutputType(event.target.value as ImageOutputType)}
+              >
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/webp">WEBP</option>
+              </select>
+            </label>
+            <label className="space-y-2 text-sm text-slate-700">
+              清晰度倍率：{pdfScale.toFixed(1)}x
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={pdfScale}
+                onChange={(event) => setPdfScale(Number.parseFloat(event.target.value))}
+                className="w-full"
+              />
+            </label>
+          </div>
+
+          <p className="text-sm text-slate-600">{pdfHint}</p>
+
           <button
             type="button"
-            onClick={runConvert}
-            className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+            onClick={convertPdfToImages}
+            disabled={busy}
+            className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            开始转换
+            开始转换并下载 ZIP
           </button>
+        </article>
+      ) : null}
+
+      {activeTab === "image" ? (
+        <article className="space-y-4 rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900">图片格式转换（批量）</h2>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={(event) => setImageFiles(Array.from(event.target.files ?? []))}
+            className="block w-full text-sm"
+          />
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm text-slate-700">
+              输出格式
+              <select
+                className="w-full rounded-xl border border-slate-200 px-3 py-2"
+                value={imageOutputType}
+                onChange={(event) => setImageOutputType(event.target.value as ImageOutputType)}
+              >
+                <option value="image/webp">WEBP</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/png">PNG</option>
+              </select>
+            </label>
+            <label className="space-y-2 text-sm text-slate-700">
+              压缩质量：{Math.round(imageQuality * 100)}%
+              <input
+                type="range"
+                min={0.4}
+                max={1}
+                step={0.05}
+                value={imageQuality}
+                onChange={(event) => setImageQuality(Number.parseFloat(event.target.value))}
+                className="w-full"
+              />
+            </label>
+          </div>
+
           <button
             type="button"
-            onClick={() => copyOutput(output)}
-            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            onClick={convertImages}
+            disabled={busy}
+            className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            复制结果
+            转换图片并下载 ZIP
           </button>
-        </div>
+        </article>
+      ) : null}
 
-        {error ? <p className="text-sm font-medium text-red-600">{error}</p> : null}
+      {activeTab === "video" ? (
+        <article className="space-y-4 rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900">视频格式转换（输出 WebM）</h2>
+          <p className="text-sm text-slate-600">在浏览器本地转码，支持批量处理。建议先用短视频测试，长视频可能耗时较长。</p>
+          <input
+            type="file"
+            accept="video/*"
+            multiple
+            onChange={(event) => setVideoFiles(Array.from(event.target.files ?? []))}
+            className="block w-full text-sm"
+          />
 
-        <textarea
-          className="h-52 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm"
-          value={output}
-          readOnly
-          placeholder="转换结果会显示在这里"
-        />
-      </article>
+          <label className="space-y-2 text-sm text-slate-700">
+            输出帧率：{videoFps} fps
+            <input
+              type="range"
+              min={12}
+              max={60}
+              step={1}
+              value={videoFps}
+              onChange={(event) => setVideoFps(Number.parseInt(event.target.value, 10))}
+              className="w-full"
+            />
+          </label>
 
-      <article className="space-y-4 rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-900">批量转换（每行一条）</h2>
-        <p className="text-sm text-slate-600">适合快速处理多条 JSON/YAML/CSV 片段，逐行转换并保留序号。</p>
-
-        <textarea
-          className="h-52 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm"
-          value={batchInput}
-          placeholder="每行输入一条待转换文本"
-          onChange={(event) => setBatchInput(event.target.value)}
-        />
-
-        <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={runBatchConvert}
-            className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+            onClick={convertVideos}
+            disabled={busy}
+            className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            批量转换
+            转换视频并下载 ZIP
           </button>
+        </article>
+      ) : null}
+
+      {activeTab === "cloud" ? (
+        <article className="space-y-4 rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900">云端转换任务（大文件）</h2>
+          <p className="text-sm text-slate-600">将文件批量上传到你自己的云端转换 API，浏览器端不保存你的 Token。</p>
+          <input
+            type="url"
+            value={cloudEndpoint}
+            onChange={(event) => setCloudEndpoint(event.target.value)}
+            placeholder="https://your-api.example.com/convert"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
+          />
+          <input
+            type="password"
+            value={cloudToken}
+            onChange={(event) => setCloudToken(event.target.value)}
+            placeholder="Bearer Token（可选）"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
+          />
+          <input
+            type="file"
+            multiple
+            onChange={(event) => setCloudFiles(Array.from(event.target.files ?? []))}
+            className="block w-full text-sm"
+          />
+
           <button
             type="button"
-            onClick={() => copyOutput(batchOutput)}
-            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            onClick={uploadCloudTask}
+            disabled={busy}
+            className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            复制批量结果
+            提交云端转换任务
           </button>
-        </div>
+        </article>
+      ) : null}
 
-        <textarea
-          className="h-52 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm"
-          value={batchOutput}
-          readOnly
-          placeholder="批量结果会显示在这里"
-        />
-      </article>
+      <p className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">状态：{status}</p>
     </section>
   );
 }
