@@ -114,6 +114,78 @@
           "tags": ["邮件", "模板", "变量"],
           "featured": true,
           "status": "active"
+        },
+        {
+          "id": "password-manager-live",
+          "name": "密码管理器",
+          "url": "/tools/password-manager",
+          "description": "本地加密保存账号密码，支持分类搜索、强度检测、随机强密码生成和安全分享。",
+          "tags": ["密码", "安全", "生成器"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "file-organizer-live",
+          "name": "文件整理工具",
+          "url": "/tools/file-organizer",
+          "description": "按类型和日期自动归类文件，支持自定义规则、智能分类和重复文件检测。",
+          "tags": ["文件", "分类", "去重"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "quick-launcher-live",
+          "name": "快捷启动器",
+          "url": "/tools/quick-launcher",
+          "description": "快速搜索并启动常用网站和应用，支持快捷键别名与工作空间一键打开。",
+          "tags": ["启动器", "搜索", "工作空间"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "clipboard-history-live",
+          "name": "剪贴板历史管理",
+          "url": "/tools/clipboard-history",
+          "description": "记录剪贴板文本历史，支持快速检索、收藏与格式化粘贴。",
+          "tags": ["剪贴板", "历史", "格式化"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "invoice-manager-live",
+          "name": "发票管理工具",
+          "url": "/tools/invoice-manager",
+          "description": "发票录入与分类统计，支持 OCR 识别辅助和报销单导出。",
+          "tags": ["发票", "报销", "OCR"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "contract-system-live",
+          "name": "合同管理系统",
+          "url": "/tools/contract-system",
+          "description": "管理合同签约与到期提醒，支持模板生成与电子签名记录。",
+          "tags": ["合同", "提醒", "签名"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "crm-mini-live",
+          "name": "客户关系管理（CRM Mini 版）",
+          "url": "/tools/crm-mini",
+          "description": "客户信息、沟通记录与跟进提醒，内置销售漏斗和客户价值报告。",
+          "tags": ["CRM", "客户", "跟进"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "team-whiteboard-live",
+          "name": "团队协作和白板",
+          "url": "/tools/team-whiteboard",
+          "description": "在线白板绘制、便签与模板，支持操作回放记录讨论过程。",
+          "tags": ["白板", "协作", "回放"],
+          "featured": true,
+          "status": "active"
         }
       ]
     },
@@ -121,62 +193,7 @@
       "id": "roadmap-tools",
       "name": "工作效率路线图",
       "sites": [
-        {
-          "id": "password-manager",
-          "name": "密码管理器",
-          "description": "安全保存密码与分类搜索，预留强密码生成和安全共享能力。",
-          "tags": ["密码", "安全", "管理"],
-          "status": "planned"
-        },
-        {
-          "id": "file-organizer",
-          "name": "文件整理工具",
-          "description": "自动按类型和日期整理文件夹，后续加入智能分类与重复文件检测。",
-          "tags": ["文件", "整理", "去重"],
-          "status": "planned"
-        },
-        {
-          "id": "quick-launcher",
-          "name": "快捷启动器",
-          "description": "快速启动应用和网站，支持搜索、自定义快捷键和工作空间。",
-          "tags": ["启动器", "快捷键", "搜索"],
-          "status": "planned"
-        },
-        {
-          "id": "clipboard-history",
-          "name": "剪贴板历史管理",
-          "description": "记录剪贴板历史，支持收藏片段以及格式化粘贴。",
-          "tags": ["剪贴板", "历史", "文本片段"],
-          "status": "planned"
-        },
-        {
-          "id": "invoice-manager",
-          "name": "发票管理工具",
-          "description": "扫描与管理发票，生成报销单，并规划 OCR 提取和支出统计。",
-          "tags": ["发票", "OCR", "报销"],
-          "status": "planned"
-        },
-        {
-          "id": "contract-system",
-          "name": "合同管理系统",
-          "description": "记录签约和到期时间自动提醒，并扩展模板和电子签名。",
-          "tags": ["合同", "提醒", "签名"],
-          "status": "planned"
-        },
-        {
-          "id": "crm-mini",
-          "name": "客户关系管理（CRM Mini 版）",
-          "description": "管理客户、沟通记录和跟进提醒，并预留销售漏斗与报告。",
-          "tags": ["CRM", "客户", "跟进"],
-          "status": "planned"
-        },
-        {
-          "id": "team-whiteboard",
-          "name": "团队协作和白板",
-          "description": "在线白板与便签协作，后续支持模板库和讨论录制回放。",
-          "tags": ["白板", "协作", "远程团队"],
-          "status": "planned"
-        }
+
       ]
     }
   ]
