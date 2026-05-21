@@ -8,6 +8,33 @@
       "name": "已上线相关工具",
       "sites": [
         {
+          "id": "advanced-pomodoro-live",
+          "name": "番茄工作法计时器（进阶版）",
+          "url": "/tools/pomodoro-pro",
+          "description": "25/5 循环计时、任务记录、每日报告和近 14 天专注日历统计。",
+          "tags": ["番茄钟", "统计", "专注"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "meeting-notes-live",
+          "name": "会议记录工具",
+          "url": "/tools/meeting-notes",
+          "description": "会议内容记录、待办提取、自动纪要和浏览器语音转写。",
+          "tags": ["会议", "待办", "纪要"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "project-board-live",
+          "name": "项目进度看板",
+          "url": "/tools/project-board",
+          "description": "任务拖拽、标签、截止日期、优先级和依赖关系管理。",
+          "tags": ["看板", "任务", "拖拽"],
+          "featured": true,
+          "status": "active"
+        },
+        {
           "id": "countdown-tool-work",
           "name": "倒计时工具",
           "url": "/tools/countdown-tool",
@@ -67,27 +94,6 @@
       "id": "roadmap-tools",
       "name": "工作效率路线图",
       "sites": [
-        {
-          "id": "advanced-pomodoro",
-          "name": "番茄工作法计时器（进阶版）",
-          "description": "记录每个番茄钟内容，生成日报，并扩展统计分析与日历联动。",
-          "tags": ["番茄钟", "统计", "日历"],
-          "status": "planned"
-        },
-        {
-          "id": "meeting-notes",
-          "name": "会议记录工具",
-          "description": "支持录音转文字、自动提取待办事项，并扩展 AI 总结与多人协作。",
-          "tags": ["会议", "转录", "协作"],
-          "status": "planned"
-        },
-        {
-          "id": "project-board",
-          "name": "项目进度看板",
-          "description": "任务拖拽、标签、截止日期管理，并预留甘特图和依赖关系。",
-          "tags": ["看板", "任务", "甘特图"],
-          "status": "planned"
-        },
         {
           "id": "time-tracker",
           "name": "时间追踪工具",
