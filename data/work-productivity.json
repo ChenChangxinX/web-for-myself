@@ -60,6 +60,33 @@
           "tags": ["目标", "OKR", "报告"],
           "featured": true,
           "status": "active"
+        },
+        {
+          "id": "reading-list-live",
+          "name": "阅读列表管理",
+          "url": "/tools/reading-list",
+          "description": "管理待读文章与书籍，支持状态、标签、笔记、阅读时长估算和网页剪藏。",
+          "tags": ["阅读", "标签", "剪藏"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "idea-box-live",
+          "name": "灵感收集箱",
+          "url": "/tools/idea-box",
+          "description": "记录文字、图片、链接灵感，支持分类整理、AI 标签建议和灵感关联。",
+          "tags": ["灵感", "AI", "关联"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "schedule-assistant-live",
+          "name": "日程安排助手",
+          "url": "/tools/schedule-assistant",
+          "description": "日历视图、提醒与重复事件，结合天气交通信息提供行程建议。",
+          "tags": ["日程", "提醒", "日历"],
+          "featured": true,
+          "status": "active"
         }
       ]
     },
@@ -67,27 +94,6 @@
       "id": "roadmap-tools",
       "name": "工作效率路线图",
       "sites": [
-        {
-          "id": "reading-list",
-          "name": "阅读列表管理",
-          "description": "保存待读文章与书籍，支持标签、阅读状态、时间估算和网页剪藏。",
-          "tags": ["阅读", "收藏", "笔记"],
-          "status": "planned"
-        },
-        {
-          "id": "idea-box",
-          "name": "灵感收集箱",
-          "description": "记录文字、图片和链接灵感，后续加入 AI 分类与灵感关联。",
-          "tags": ["灵感", "整理", "AI"],
-          "status": "planned"
-        },
-        {
-          "id": "schedule-assistant",
-          "name": "日程安排助手",
-          "description": "日历视图、重复事件和提醒，后续扩展智能建议与天气交通信息。",
-          "tags": ["日程", "提醒", "日历"],
-          "status": "planned"
-        },
         {
           "id": "focus-mode",
           "name": "专注模式工具",
