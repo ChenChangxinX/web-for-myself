@@ -4,27 +4,9 @@
   "description": "围绕个人效率与常用场景的站内工具集合。",
   "groups": [
     {
-      "id": "utilities",
-      "name": "通用工具",
+      "id": "productivity-and-time",
+      "name": "效率与时间",
       "sites": [
-        {
-          "id": "base64-tool",
-          "name": "Base64 编解码",
-          "url": "/tools/base64-tool",
-          "description": "支持文本与图片 Base64 编解码、在线预览、批量文件编码，以及 URL/Unicode 编解码。",
-          "tags": ["Base64", "编码转换", "开发辅助"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "qr-generator",
-          "name": "二维码生成器",
-          "url": "/tools/qr-generator",
-          "description": "支持文本/链接二维码生成、Logo 定制、摄像头扫码与批量生成。",
-          "tags": ["二维码", "扫码", "分享"],
-          "featured": true,
-          "status": "active"
-        },
         {
           "id": "countdown-tool",
           "name": "倒计时工具",
@@ -41,111 +23,6 @@
           "description": "输入选项随机抽取，支持权重设置与历史记录。",
           "tags": ["随机", "决策", "选择困难"],
           "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "unit-converter",
-          "name": "单位转换器",
-          "url": "/tools/unit-converter",
-          "description": "长度、重量、温度、货币转换，支持实时汇率更新与自定义单位。",
-          "tags": ["单位转换", "汇率", "计算"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "regex-tester",
-          "name": "正则表达式测试器",
-          "url": "/tools/regex-tester",
-          "description": "实时测试正则表达式，提供匹配高亮、模板、解释与生成器。",
-          "tags": ["正则", "文本处理", "开发辅助"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "markdown-to-html",
-          "name": "Markdown 转 HTML",
-          "url": "/tools/markdown-to-html",
-          "description": "Markdown 实时转换 HTML，支持代码高亮、主题切换和导出。",
-          "tags": ["Markdown", "HTML", "文档"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "image-compressor",
-          "name": "图片压缩工具",
-          "url": "/tools/image-compressor",
-          "description": "批量压缩图片并支持格式转换、裁剪和旋转。",
-          "tags": ["图片处理", "压缩", "格式转换"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "color-picker",
-          "name": "颜色选择器",
-          "url": "/tools/color-picker",
-          "description": "选择颜色并获取 HEX、RGB、HSL 代码，支持调色板保存、配色推荐和图片取色。",
-          "tags": ["色彩工具", "设计", "前端开发"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "image-editor",
-          "name": "图片编辑器",
-          "url": "/tools/image-editor",
-          "description": "读取图片时间与地理位置信息，并将可编辑文本写入图片。",
-          "tags": ["EXIF", "图片处理", "水印"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "text-compare",
-          "name": "文本对比",
-          "url": "/tools/text-compare",
-          "description": "对比两段文本差异，支持行对比、字符对比和文件上传。",
-          "tags": ["Diff", "代码审查", "文档对比"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "password-generator",
-          "name": "密码生成器",
-          "url": "/tools/password-generator",
-          "description": "生成强密码，支持长度、字符类型和历史记录管理。",
-          "tags": ["安全", "密码", "随机生成"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "image-to-text",
-          "name": "图片转文字",
-          "url": "/tools/image-to-text",
-          "description": "上传或粘贴本地图片，自动识别并复制图片中的文字。",
-          "tags": ["OCR", "图片处理", "文字提取"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "json-formatter",
-          "name": "JSON Formatter",
-          "url": "/tools/json-formatter",
-          "description": "格式化、校验与高亮 JSON，支持树形折叠、JSONPath 查询和 YAML/XML 转换。",
-          "tags": ["开发辅助", "JSON"],
-          "featured": true,
-          "status": "active"
-        }
-      ]
-    },
-    {
-      "id": "personal-tools-roadmap",
-      "name": "个人工具路线图（13-20）",
-      "sites": [
-        {
-          "id": "file-format-converter",
-          "name": "文件格式转换",
-          "url": "/tools/file-format-converter",
-          "description": "常见格式互转（如 PDF 转图片、视频格式转换），规划批量转换与云端转换能力，方便处理大文件。",
-          "tags": ["格式转换", "批量处理", "云端"],
-          "featured": false,
           "status": "active"
         },
         {
@@ -174,6 +51,39 @@
           "tags": ["时区", "协作", "会议"],
           "featured": false,
           "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "document-and-text",
+      "name": "文档与文本",
+      "sites": [
+        {
+          "id": "markdown-to-html",
+          "name": "Markdown 转 HTML",
+          "url": "/tools/markdown-to-html",
+          "description": "Markdown 实时转换 HTML，支持代码高亮、主题切换和导出。",
+          "tags": ["Markdown", "HTML", "文档"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "text-compare",
+          "name": "文本对比",
+          "url": "/tools/text-compare",
+          "description": "对比两段文本差异，支持行对比、字符对比和文件上传。",
+          "tags": ["Diff", "代码审查", "文档对比"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "json-formatter",
+          "name": "JSON Formatter",
+          "url": "/tools/json-formatter",
+          "description": "格式化、校验与高亮 JSON，支持树形折叠、JSONPath 查询和 YAML/XML 转换。",
+          "tags": ["开发辅助", "JSON"],
+          "featured": true,
+          "status": "active"
         },
         {
           "id": "word-counter-tool",
@@ -181,25 +91,100 @@
           "url": "/tools/word-counter-tool",
           "description": "统计字数、词数、段落数，支持中英文；后续扩展阅读时长估算与关键词分析。",
           "tags": ["字数统计", "关键词", "写作"],
-          "featured": false,
+          "featured": true,
           "status": "active"
         },
         {
-          "id": "url-shortener-tool",
-          "name": "网址缩短工具",
-          "url": "/tools/url-shortener-tool",
-          "description": "生成短链接并支持自定义短链，规划点击统计与二维码直达。",
-          "tags": ["短链接", "统计", "二维码"],
-          "featured": false,
+          "id": "image-to-text",
+          "name": "图片转文字",
+          "url": "/tools/image-to-text",
+          "description": "上传或粘贴本地图片，自动识别并复制图片中的文字。",
+          "tags": ["OCR", "图片处理", "文字提取"],
+          "featured": true,
           "status": "active"
         },
         {
-          "id": "random-name-generator",
-          "name": "随机名字生成器",
-          "url": "/tools/random-name-generator",
-          "description": "生成人名、公司名、产品名等多风格名称，后续扩展关键词 AI 生成与域名可用性检查。",
-          "tags": ["随机生成", "命名", "域名"],
+          "id": "file-format-converter",
+          "name": "文件格式转换",
+          "url": "/tools/file-format-converter",
+          "description": "常见格式互转（如 PDF 转图片、视频格式转换），规划批量转换与云端转换能力，方便处理大文件。",
+          "tags": ["格式转换", "批量处理", "云端"],
           "featured": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "image-and-media",
+      "name": "图像与多媒体",
+      "sites": [
+        {
+          "id": "image-compressor",
+          "name": "图片压缩工具",
+          "url": "/tools/image-compressor",
+          "description": "批量压缩图片并支持格式转换、裁剪和旋转。",
+          "tags": ["图片处理", "压缩", "格式转换"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "image-editor",
+          "name": "图片编辑器",
+          "url": "/tools/image-editor",
+          "description": "读取图片时间与地理位置信息，并将可编辑文本写入图片。",
+          "tags": ["EXIF", "图片处理", "水印"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "color-picker",
+          "name": "颜色选择器",
+          "url": "/tools/color-picker",
+          "description": "选择颜色并获取 HEX、RGB、HSL 代码，支持调色板保存、配色推荐和图片取色。",
+          "tags": ["色彩工具", "设计", "前端开发"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "qr-generator",
+          "name": "二维码生成器",
+          "url": "/tools/qr-generator",
+          "description": "支持文本/链接二维码生成、Logo 定制、摄像头扫码与批量生成。",
+          "tags": ["二维码", "扫码", "分享"],
+          "featured": true,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "dev-and-convert",
+      "name": "开发与转换",
+      "sites": [
+        {
+          "id": "base64-tool",
+          "name": "Base64 编解码",
+          "url": "/tools/base64-tool",
+          "description": "支持文本与图片 Base64 编解码、在线预览、批量文件编码，以及 URL/Unicode 编解码。",
+          "tags": ["Base64", "编码转换", "开发辅助"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "regex-tester",
+          "name": "正则表达式测试器",
+          "url": "/tools/regex-tester",
+          "description": "实时测试正则表达式，提供匹配高亮、模板、解释与生成器。",
+          "tags": ["正则", "文本处理", "开发辅助"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "unit-converter",
+          "name": "单位转换器",
+          "url": "/tools/unit-converter",
+          "description": "长度、重量、温度、货币转换，支持实时汇率更新与自定义单位。",
+          "tags": ["单位转换", "汇率", "计算"],
+          "featured": true,
           "status": "active"
         },
         {
@@ -208,6 +193,39 @@
           "url": "/tools/base-converter-tool",
           "description": "支持二进制、八进制、十进制、十六进制互转，规划位运算和浮点二进制表示。",
           "tags": ["进制", "位运算", "开发"],
+          "featured": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "sharing-and-security",
+      "name": "分享与安全",
+      "sites": [
+        {
+          "id": "url-shortener-tool",
+          "name": "网址缩短工具",
+          "url": "/tools/url-shortener-tool",
+          "description": "生成短链接并支持自定义短链，规划点击统计与二维码直达。",
+          "tags": ["短链接", "统计", "二维码"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "password-generator",
+          "name": "密码生成器",
+          "url": "/tools/password-generator",
+          "description": "生成强密码，支持长度、字符类型和历史记录管理。",
+          "tags": ["安全", "密码", "随机生成"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "random-name-generator",
+          "name": "随机名字生成器",
+          "url": "/tools/random-name-generator",
+          "description": "生成人名、公司名、产品名等多风格名称，后续扩展关键词 AI 生成与域名可用性检查。",
+          "tags": ["随机生成", "命名", "域名"],
           "featured": false,
           "status": "active"
         }
