@@ -4,27 +4,57 @@
   "description": "把学习教育类灵感直接做成可练、可记、可追踪的站内工具。",
   "groups": [
     {
-      "id": "learning-live-tools",
-      "name": "已上线学习教育工具",
+      "id": "memory-and-review",
+      "name": "记忆与复习",
       "sites": [
         { "id": "word-flashcards-live", "name": "单词记忆卡片", "url": "/tools/word-flashcards", "description": "基于复习间隔安排单词卡复习，支持例句与发音提示。", "tags": ["单词", "记忆曲线", "发音"], "featured": true, "status": "active" },
-        { "id": "math-generator-live", "name": "数学练习题生成器", "url": "/tools/math-generator", "description": "生成不同难度的数学题并即时批改，自动沉淀错题。", "tags": ["数学", "练习", "批改"], "featured": true, "status": "active" },
-        { "id": "coding-bank-live", "name": "编程题库", "url": "/tools/coding-bank", "description": "浏览编程题、记录作答状态和解题思路。", "tags": ["编程", "题库", "评测"], "featured": true, "status": "active" },
-        { "id": "study-planner-live", "name": "学习计划制定工具", "url": "/tools/study-planner", "description": "分解学习计划并追踪执行进度，生成阶段报告。", "tags": ["学习计划", "进度", "报告"], "featured": true, "status": "active" },
         { "id": "mistake-book-live", "name": "错题本", "url": "/tools/mistake-book", "description": "记录错题、标签与复习安排，支持图片预览。", "tags": ["错题", "OCR", "复习"], "featured": true, "status": "active" },
         { "id": "knowledge-cards-live", "name": "知识卡片", "url": "/tools/knowledge-cards", "description": "Markdown 知识卡片与随机复习，适合碎片记忆。", "tags": ["知识卡片", "复习", "标签"], "featured": true, "status": "active" },
-        { "id": "mind-map-live", "name": "思维导图工具", "url": "/tools/mind-map", "description": "编辑思维节点、层级与颜色，快速梳理知识结构。", "tags": ["思维导图", "整理", "协作"], "featured": true, "status": "active" },
-        { "id": "course-schedule-live", "name": "课程表管理", "url": "/tools/course-schedule", "description": "管理课程、作业和考试提醒。", "tags": ["课程表", "作业", "提醒"], "featured": true, "status": "active" },
-        { "id": "notes-sharing-live", "name": "学习笔记分享平台", "url": "/tools/notes-sharing", "description": "发布和收藏学习笔记，支持评分与代码块内容。", "tags": ["笔记", "分享", "评分"], "featured": true, "status": "active" },
+        { "id": "recite-helper-live", "name": "背诵助手", "url": "/tools/recite-helper", "description": "按段背诵、遮挡关键词并检查默写。", "tags": ["背诵", "语音", "记忆"], "featured": true, "status": "active" }
+      ]
+    },
+    {
+      "id": "practice-and-question-bank",
+      "name": "练习与题库",
+      "sites": [
+        { "id": "math-generator-live", "name": "数学练习题生成器", "url": "/tools/math-generator", "description": "生成不同难度的数学题并即时批改，自动沉淀错题。", "tags": ["数学", "练习", "批改"], "featured": true, "status": "active" },
+        { "id": "coding-bank-live", "name": "编程题库", "url": "/tools/coding-bank", "description": "浏览编程题、记录作答状态和解题思路。", "tags": ["编程", "题库", "评测"], "featured": true, "status": "active" },
         { "id": "question-practice-live", "name": "在线题库练习", "url": "/tools/question-practice", "description": "系统化刷题并记录正确率与练习历史。", "tags": ["题库", "刷题", "考试"], "featured": true, "status": "active" },
-        { "id": "recite-helper-live", "name": "背诵助手", "url": "/tools/recite-helper", "description": "按段背诵、遮挡关键词并检查默写。", "tags": ["背诵", "语音", "记忆"], "featured": true, "status": "active" },
+        { "id": "mind-map-live", "name": "思维导图工具", "url": "/tools/mind-map", "description": "编辑思维节点、层级与颜色，快速梳理知识结构。", "tags": ["思维导图", "整理", "协作"], "featured": true, "status": "active" }
+      ]
+    },
+    {
+      "id": "planning-and-time",
+      "name": "计划与时间",
+      "sites": [
+        { "id": "study-planner-live", "name": "学习计划制定工具", "url": "/tools/study-planner", "description": "分解学习计划并追踪执行进度，生成阶段报告。", "tags": ["学习计划", "进度", "报告"], "featured": true, "status": "active" },
+        { "id": "course-schedule-live", "name": "课程表管理", "url": "/tools/course-schedule", "description": "管理课程、作业和考试提醒。", "tags": ["课程表", "作业", "提醒"], "featured": true, "status": "active" },
         { "id": "study-duration-live", "name": "学习时长统计", "url": "/tools/study-duration", "description": "记录学习时长与趋势，观察长期投入。", "tags": ["学习时长", "统计", "趋势"], "featured": true, "status": "active" },
+        { "id": "exam-countdown-live", "name": "考试倒计时", "url": "/tools/exam-countdown", "description": "考试日期倒计时与复习计划进度管理。", "tags": ["考试", "倒计时", "复习"], "featured": true, "status": "active" }
+      ]
+    },
+    {
+      "id": "notes-and-knowledge-management",
+      "name": "笔记与知识管理",
+      "sites": [
+        { "id": "notes-sharing-live", "name": "学习笔记分享平台", "url": "/tools/notes-sharing", "description": "发布和收藏学习笔记，支持评分与代码块内容。", "tags": ["笔记", "分享", "评分"], "featured": true, "status": "active" },
         { "id": "reading-notes-live", "name": "读书笔记管理", "url": "/tools/reading-notes", "description": "记录阅读进度、摘抄和感想。", "tags": ["读书", "笔记", "报告"], "featured": true, "status": "active" },
-        { "id": "paper-manager-live", "name": "论文管理工具", "url": "/tools/paper-manager", "description": "管理论文文献、引用格式和阅读笔记。", "tags": ["论文", "文献", "引用"], "featured": true, "status": "active" },
+        { "id": "paper-manager-live", "name": "论文管理工具", "url": "/tools/paper-manager", "description": "管理论文文献、引用格式和阅读笔记。", "tags": ["论文", "文献", "引用"], "featured": true, "status": "active" }
+      ]
+    },
+    {
+      "id": "teaching-and-collaboration",
+      "name": "教学与作业协作",
+      "sites": [
         { "id": "teaching-whiteboard-live", "name": "在线白板教学", "url": "/tools/teaching-whiteboard", "description": "教学白板、讨论区和回放感知的课堂板书。", "tags": ["教学", "白板", "互动"], "featured": true, "status": "active" },
         { "id": "homework-submit-live", "name": "作业提交系统", "url": "/tools/homework-submit", "description": "作业上传、批改记录与评分追踪。", "tags": ["作业", "评分", "查重"], "featured": true, "status": "active" },
-        { "id": "exam-countdown-live", "name": "考试倒计时", "url": "/tools/exam-countdown", "description": "考试日期倒计时与复习计划进度管理。", "tags": ["考试", "倒计时", "复习"], "featured": true, "status": "active" },
-        { "id": "study-group-live", "name": "学习小组管理", "url": "/tools/study-group", "description": "小组成员、资料分享和打卡协作。", "tags": ["学习小组", "讨论", "打卡"], "featured": true, "status": "active" },
+        { "id": "study-group-live", "name": "学习小组管理", "url": "/tools/study-group", "description": "小组成员、资料分享和打卡协作。", "tags": ["学习小组", "讨论", "打卡"], "featured": true, "status": "active" }
+      ]
+    },
+    {
+      "id": "growth-and-achievement",
+      "name": "成长与成就",
+      "sites": [
         { "id": "skill-tree-live", "name": "技能树可视化", "url": "/tools/skill-tree", "description": "以节点解锁方式展示学习路径和阶段进度。", "tags": ["技能树", "游戏化", "成就"], "featured": true, "status": "active" },
         { "id": "study-achievement-live", "name": "学习成就系统", "url": "/tools/study-achievement", "description": "积累勋章、里程碑和排行榜式学习反馈。", "tags": ["成就", "勋章", "排行榜"], "featured": true, "status": "active" }
       ]

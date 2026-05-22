@@ -4,8 +4,8 @@
   "description": "把娱乐创意灵感做成可直接体验的工具，覆盖创作、游戏、记录与轻娱乐场景。",
   "groups": [
     {
-      "id": "creative-live-tools",
-      "name": "已上线娱乐创意工具",
+      "id": "creative-and-generation",
+      "name": "创作与生成",
       "sites": [
         {
           "id": "meme-maker-live",
@@ -35,6 +35,30 @@
           "status": "active"
         },
         {
+          "id": "story-generator-live",
+          "name": "随机故事生成器",
+          "url": "/tools/story-generator",
+          "description": "输入关键词生成多风格短故事并支持续写。",
+          "tags": ["故事", "创作", "AI"],
+          "featured": true,
+          "status": "active"
+        },
+        {
+          "id": "poetry-generator-live",
+          "name": "诗歌生成器",
+          "url": "/tools/poetry-generator",
+          "description": "根据主题生成古风、现代等诗体并做押韵提示。",
+          "tags": ["诗歌", "古风", "押韵"],
+          "featured": true,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "fortune-and-zodiac",
+      "name": "星座与运势",
+      "sites": [
+        {
           "id": "zodiac-fortune-live",
           "name": "星座运势查询",
           "url": "/tools/zodiac-fortune",
@@ -51,7 +75,13 @@
           "tags": ["抽签", "签文", "许愿"],
           "featured": true,
           "status": "active"
-        },
+        }
+      ]
+    },
+    {
+      "id": "casual-games",
+      "name": "休闲游戏",
+      "sites": [
         {
           "id": "guess-number-live",
           "name": "猜数字游戏",
@@ -89,6 +119,21 @@
           "status": "active"
         },
         {
+          "id": "virtual-pet-live",
+          "name": "虚拟宠物养成",
+          "url": "/tools/virtual-pet",
+          "description": "喂食、玩耍、升级的虚拟宠物互动工具。",
+          "tags": ["宠物", "养成", "对战"],
+          "featured": true,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "audio-video-and-recommendation",
+      "name": "影音与推荐",
+      "sites": [
+        {
           "id": "music-player-live",
           "name": "音乐播放器",
           "url": "/tools/music-player",
@@ -114,7 +159,13 @@
           "tags": ["食谱", "收藏", "营养"],
           "featured": true,
           "status": "active"
-        },
+        }
+      ]
+    },
+    {
+      "id": "life-recording",
+      "name": "生活记录",
+      "sites": [
         {
           "id": "travel-diary-live",
           "name": "旅行日记",
@@ -150,34 +201,13 @@
           "tags": ["梦境", "记录", "分析"],
           "featured": true,
           "status": "active"
-        },
-        {
-          "id": "story-generator-live",
-          "name": "随机故事生成器",
-          "url": "/tools/story-generator",
-          "description": "输入关键词生成多风格短故事并支持续写。",
-          "tags": ["故事", "创作", "AI"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "poetry-generator-live",
-          "name": "诗歌生成器",
-          "url": "/tools/poetry-generator",
-          "description": "根据主题生成古风、现代等诗体并做押韵提示。",
-          "tags": ["诗歌", "古风", "押韵"],
-          "featured": true,
-          "status": "active"
-        },
-        {
-          "id": "virtual-pet-live",
-          "name": "虚拟宠物养成",
-          "url": "/tools/virtual-pet",
-          "description": "喂食、玩耍、升级的虚拟宠物互动工具。",
-          "tags": ["宠物", "养成", "对战"],
-          "featured": true,
-          "status": "active"
-        },
+        }
+      ]
+    },
+    {
+      "id": "drawing-and-creation",
+      "name": "绘画与互动",
+      "sites": [
         {
           "id": "doodle-board-live",
           "name": "在线涂鸦板",
