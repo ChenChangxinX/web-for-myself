@@ -2,7 +2,27 @@
 
 import { useMemo, useState } from "react";
 
-type Mode = "chat" | "tree" | "qa" | "blog" | "photo" | "video" | "music" | "book" | "movie" | "food" | "travel" | "swap" | "trade" | "event" | "poll" | "confession" | "wish" | "daily" | "voice" | "docs";
+type Mode =
+  | "chat"
+  | "treehole"
+  | "qa"
+  | "blog"
+  | "photo"
+  | "video"
+  | "music"
+  | "book"
+  | "movie"
+  | "food"
+  | "travel"
+  | "skill"
+  | "second"
+  | "event"
+  | "poll"
+  | "confession"
+  | "wish"
+  | "daily"
+  | "voice"
+  | "docs";
 
 interface Meta {
   title: string;
@@ -11,213 +31,340 @@ interface Meta {
   mode: Mode;
 }
 
+interface DocState {
+  title: string;
+  text: string;
+  version: number;
+  permission: "owner" | "editor" | "viewer";
+}
+
+interface SocialState {
+  posts: string[];
+  likes: number;
+  votes: { optionA: number; optionB: number; optionC: number };
+  moodTag: string;
+  reportCount: number;
+  supportCount: number;
+  voiceRoomOn: boolean;
+  doc: DocState;
+}
+
 const META: Record<string, Meta> = {
-  "anonymous-chat": { title: "匿名聊天室", badge: "CHAT", desc: "随机聊天和话题匹配", mode: "chat" },
-  "tree-hole": { title: "树洞倾诉平台", badge: "TREE", desc: "匿名倾诉和安慰", mode: "tree" },
-  "qa-community": { title: "问答社区（Mini 版）", badge: "Q&A", desc: "提问回答与采纳", mode: "qa" },
-  "blog-platform": { title: "博客平台", badge: "BLOG", desc: "博客发布与订阅", mode: "blog" },
-  "photo-sharing": { title: "照片分享平台", badge: "PHOTO", desc: "图文发布和互动", mode: "photo" },
-  "short-video": { title: "短视频分享平台", badge: "VIDEO", desc: "视频主题和评论", mode: "video" },
-  "music-sharing": { title: "音乐分享平台", badge: "MUSIC", desc: "歌单推荐与评论", mode: "music" },
-  "book-review": { title: "书评分享平台", badge: "BOOK", desc: "书评和评分", mode: "book" },
-  "movie-review": { title: "电影评论平台", badge: "MOVIE", desc: "影评和影单", mode: "movie" },
-  "food-sharing": { title: "美食分享平台", badge: "FOOD", desc: "美食打卡和推荐", mode: "food" },
-  "travel-sharing": { title: "旅行分享平台", badge: "TRAVEL", desc: "游记和路线", mode: "travel" },
-  "skill-swap": { title: "技能交换平台", badge: "SWAP", desc: "技能互助匹配", mode: "swap" },
-  "second-hand": { title: "二手交易平台", badge: "TRADE", desc: "闲置发布和交易", mode: "trade" },
-  "event-publish": { title: "活动发布平台", badge: "EVENT", desc: "活动创建报名", mode: "event" },
-  "poll-platform": { title: "投票调查平台", badge: "POLL", desc: "问卷与投票", mode: "poll" },
-  "confession-wall": { title: "表白墙", badge: "LOVE", desc: "匿名表白互动", mode: "confession" },
-  "wish-list-sharing": { title: "愿望清单分享", badge: "WISH", desc: "愿望进度追踪", mode: "wish" },
-  "daily-photo": { title: "每日一图分享", badge: "DAILY", desc: "每日投稿展示", mode: "daily" },
-  "voice-chat": { title: "语音聊天室", badge: "VOICE", desc: "房间话题讨论", mode: "voice" },
-  "collab-docs": { title: "在线协作文档", badge: "DOCS", desc: "多人编辑评论", mode: "docs" },
+  "anonymous-chat": { title: "匿名聊天室", badge: "CHAT", desc: "即时聊天 + 过滤与举报", mode: "chat" },
+  "tree-hole": { title: "树洞倾诉", badge: "TREEHOLE", desc: "匿名表达 + 情绪标签", mode: "treehole" },
+  "qa-community": { title: "问答社区", badge: "Q&A", desc: "提问回答 + 点赞采纳", mode: "qa" },
+  "blog-platform": { title: "博客发布平台", badge: "BLOG", desc: "文章发布 + 标签管理", mode: "blog" },
+  "photo-sharing": { title: "图片分享社区", badge: "PHOTO", desc: "图片发布 + 互动评论", mode: "photo" },
+  "short-video": { title: "短视频分享", badge: "VIDEO", desc: "短视频上传 + 热度", mode: "video" },
+  "music-sharing": { title: "音乐分享", badge: "MUSIC", desc: "歌单推荐 + 播放榜", mode: "music" },
+  "book-review": { title: "书评社区", badge: "BOOK", desc: "书评发布 + 评分", mode: "book" },
+  "movie-review": { title: "影评社区", badge: "MOVIE", desc: "影评发布 + 打分", mode: "movie" },
+  "food-sharing": { title: "美食分享", badge: "FOOD", desc: "菜谱笔记 + 打卡", mode: "food" },
+  "travel-sharing": { title: "旅行分享", badge: "TRAVEL", desc: "旅行攻略 + 游记", mode: "travel" },
+  "skill-swap": { title: "技能交换", badge: "SKILL", desc: "技能匹配 + 互助", mode: "skill" },
+  "second-hand": { title: "二手交易", badge: "SECOND", desc: "闲置发布 + 交易沟通", mode: "second" },
+  "event-publish": { title: "活动发布", badge: "EVENT", desc: "活动组织 + 报名", mode: "event" },
+  "poll-platform": { title: "投票平台", badge: "POLL", desc: "多选项投票 + 实时结果", mode: "poll" },
+  "confession-wall": { title: "表白墙", badge: "CONFESSION", desc: "匿名表白 + 祝福", mode: "confession" },
+  "wish-list-sharing": { title: "愿望清单分享", badge: "WISH", desc: "愿望公开 + 支持", mode: "wish" },
+  "daily-photo": { title: "每日一图", badge: "DAILY", desc: "每日摄影 + 连续打卡", mode: "daily" },
+  "voice-chat": { title: "语音聊天", badge: "VOICE", desc: "房间语音 + 排麦", mode: "voice" },
+  "collab-docs": { title: "协作文档", badge: "DOCS", desc: "多人编辑 + 版本回溯", mode: "docs" },
 };
 
-function hints(mode: Mode) {
-  const table: Record<Mode, string[]> = {
-    chat: ["随机匹配", "文字+表情", "举报机制"],
-    tree: ["匿名倾诉", "情绪分析", "咨询建议"],
-    qa: ["提问回答", "采纳点赞", "积分系统"],
-    blog: ["Markdown", "RSS 订阅", "专栏归档"],
-    photo: ["滤镜标签", "照片故事", "互动评论"],
-    video: ["剪辑特效", "话题挑战", "点赞评论"],
-    music: ["歌单推荐", "歌词同步", "推荐算法"],
-    book: ["书评评分", "阅读进度", "主题书单"],
-    movie: ["观影记录", "影评评分", "影单"],
-    food: ["美食打卡", "地点地图", "餐厅推荐"],
-    travel: ["行程规划", "游记分享", "旅行足迹"],
-    swap: ["技能发布", "匹配算法", "线上教学"],
-    trade: ["信用评价", "同城交易", "私信沟通"],
-    event: ["活动提醒", "报名管理", "签到"],
-    poll: ["多题型问卷", "结果统计", "可视化"],
-    confession: ["匿名表白", "成功率", "回应"],
-    wish: ["愿望进度", "众筹支持", "见证"],
-    daily: ["每日投稿", "图片日历", "评选"],
-    voice: ["多人语音", "房间主题", "录音回放"],
-    docs: ["实时协作", "权限控制", "模板+版本"],
+function defaultState(): SocialState {
+  return {
+    posts: [],
+    likes: 0,
+    votes: { optionA: 2, optionB: 3, optionC: 1 },
+    moodTag: "平静",
+    reportCount: 0,
+    supportCount: 0,
+    voiceRoomOn: false,
+    doc: {
+      title: "协作文档草稿",
+      text: "# 会议纪要\n- 议题\n- 决议\n- 待办",
+      version: 1,
+      permission: "editor",
+    },
   };
-  return table[mode];
+}
+
+function readState(toolId: string): SocialState {
+  if (typeof window === "undefined") return defaultState();
+  try {
+    const raw = localStorage.getItem(`social-tool-state:${toolId}`);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw) as Partial<SocialState>;
+    return {
+      ...defaultState(),
+      ...parsed,
+      votes: { ...defaultState().votes, ...(parsed.votes ?? {}) },
+      doc: { ...defaultState().doc, ...(parsed.doc ?? {}) },
+    };
+  } catch {
+    return defaultState();
+  }
+}
+
+function saveState(toolId: string, state: SocialState) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(`social-tool-state:${toolId}`, JSON.stringify(state));
+}
+
+function moodHint(value: string) {
+  if (value.includes("焦虑") || value.includes("低落")) return "建议先做 4-7-8 呼吸，再发帖。";
+  if (value.includes("开心") || value.includes("兴奋")) return "积极状态适合发布长文或开语音房。";
+  return "保持真实表达，也请注意隐私信息。";
+}
+
+function keywordRisk(text: string) {
+  const risky = ["联系方式", "转账", "银行卡", "住址", "辱骂", "刷单"];
+  return risky.filter((key) => text.includes(key));
+}
+
+function csvEscape(value: string) {
+  return `"${value.replace(/"/g, '""')}"`;
 }
 
 export function SocialToolStudio({ toolId }: { toolId: string }) {
-  const meta = META[toolId] ?? { title: "社交工具", badge: "SOCIAL", desc: "社交互动实验台", mode: "chat" as const };
+  const meta = META[toolId] ?? { title: "社交互动工具", badge: "SOCIAL", desc: "社区互动实验台", mode: "chat" as const };
+  const [state, setState] = useState<SocialState>(() => readState(toolId));
   const [input, setInput] = useState("");
-  const [posts, setPosts] = useState<string[]>([]);
-  const [options, setOptions] = useState<string[]>(["选项A", "选项B"]);
-  const [votes, setVotes] = useState<number[]>([0, 0]);
-  const [interest, setInterest] = useState("电影");
-  const [reportCount, setReportCount] = useState(0);
-  const [topic, setTopic] = useState("闲聊");
-  const [supportCount, setSupportCount] = useState(0);
-  const [docPermission, setDocPermission] = useState("可编辑");
-  const [docVersion, setDocVersion] = useState(1);
+  const [validation, setValidation] = useState("");
 
-  const matchScore = useMemo(() => {
-    const base = `${interest}${input}`.length;
-    return 60 + (base % 41);
-  }, [interest, input]);
+  const voteTotal = useMemo(() => state.votes.optionA + state.votes.optionB + state.votes.optionC, [state.votes]);
 
-  function publish(prefix: string) {
+  function mutate(next: Partial<SocialState>) {
+    setState((current) => {
+      const merged = { ...current, ...next };
+      saveState(toolId, merged);
+      return merged;
+    });
+  }
+
+  function addPost(prefix: string) {
     const value = input.trim();
-    if (!value) return;
-    setPosts((current) => [`${prefix}${value}`, ...current].slice(0, 16));
+    if (!value) {
+      setValidation("请输入内容后再发布");
+      return;
+    }
+    if (value.length > 180) {
+      setValidation("内容过长，请控制在 180 字以内");
+      return;
+    }
+    const risks = keywordRisk(value);
+    if (risks.length > 0) {
+      setValidation(`检测到敏感词: ${risks.join("、")}，请修改后再发布`);
+      return;
+    }
+    if (state.posts.some((item) => item.endsWith(value))) {
+      setValidation("请勿重复发布相同内容");
+      return;
+    }
+    setValidation("");
+    mutate({ posts: [`${prefix}${value}`, ...state.posts].slice(0, 30) });
     setInput("");
   }
 
-  const negativeHint = useMemo(() => {
-    const text = input.toLowerCase();
-    if (text.includes("累") || text.includes("难过") || text.includes("焦虑")) {
-      return "检测到负面情绪，建议先做呼吸放松并联系可信赖的人。";
-    }
-    return "情绪平稳，可继续表达。";
-  }, [input]);
+  function vote(option: "optionA" | "optionB" | "optionC") {
+    mutate({ votes: { ...state.votes, [option]: state.votes[option] + 1 } });
+  }
+
+  function exportPosts() {
+    const payload = {
+      tool: toolId,
+      title: meta.title,
+      exportedAt: new Date().toISOString(),
+      posts: state.posts,
+      stats: {
+        likes: state.likes,
+        supportCount: state.supportCount,
+        reportCount: state.reportCount,
+      },
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${toolId}-posts.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportPollCsv() {
+    const lines = [
+      "option,votes,ratio",
+      `A,${state.votes.optionA},${voteTotal === 0 ? "0%" : `${Math.round((state.votes.optionA / voteTotal) * 100)}%`}`,
+      `B,${state.votes.optionB},${voteTotal === 0 ? "0%" : `${Math.round((state.votes.optionB / voteTotal) * 100)}%`}`,
+      `C,${state.votes.optionC},${voteTotal === 0 ? "0%" : `${Math.round((state.votes.optionC / voteTotal) * 100)}%`}`,
+    ];
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${toolId}-poll.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportDoc() {
+    const lines = [
+      `title,${csvEscape(state.doc.title)}`,
+      `version,${state.doc.version}`,
+      `permission,${state.doc.permission}`,
+      `content,${csvEscape(state.doc.text)}`,
+    ];
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${toolId}-doc.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <section className="space-y-6 rounded-3xl border border-black/10 bg-white/90 p-6 shadow-sm">
       <header className="rounded-3xl border border-slate-200 bg-white p-5">
-        <p className="mb-2 inline-flex rounded-full bg-fuchsia-100 px-3 py-1 text-xs font-semibold tracking-[0.14em] text-fuchsia-700">{meta.badge}</p>
+        <p className="mb-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold tracking-[0.14em] text-emerald-700">{meta.badge}</p>
         <h2 className="text-2xl font-extrabold text-slate-900">{meta.title}</h2>
         <p className="mt-2 text-sm text-slate-600">{meta.desc}</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {hints(meta.mode).map((item) => (
-            <span key={item} className="rounded-full bg-fuchsia-50 px-3 py-1 text-xs text-fuchsia-700">{item}</span>
-          ))}
-        </div>
       </header>
 
       <article className="space-y-3 rounded-3xl border border-slate-200 bg-white p-5">
-        {(meta.mode === "chat" || meta.mode === "swap" || meta.mode === "voice") ? (
-          <div className="grid gap-2 sm:grid-cols-2">
-            <select value={interest} onChange={(event) => setInterest(event.target.value)} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
-              <option>电影</option><option>音乐</option><option>旅行</option><option>编程</option>
-            </select>
-            <select value={topic} onChange={(event) => setTopic(event.target.value)} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
-              <option>闲聊</option><option>求助</option><option>合作</option><option>分享</option>
-            </select>
-          </div>
-        ) : null}
-
-        <div className="flex gap-2">
-          <input value={input} onChange={(event) => setInput(event.target.value)} placeholder="输入内容..." className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm" />
+        <div className="flex flex-wrap gap-2">
+          <input
+            value={input}
+            onChange={(event) => {
+              setInput(event.target.value);
+              setValidation("");
+            }}
+            placeholder="输入要发布的内容"
+            className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
+          />
           <button
             type="button"
             onClick={() => {
-              if (meta.mode === "chat") publish("匿名: ");
-              else if (meta.mode === "tree") publish("树洞: ");
-              else if (meta.mode === "qa") publish("问题: ");
-              else if (meta.mode === "blog") publish("博客: ");
-              else if (meta.mode === "photo") publish("照片: ");
-              else if (meta.mode === "video") publish("短视频: ");
-              else if (meta.mode === "music") publish("歌单: ");
-              else if (meta.mode === "book") publish("书评: ");
-              else if (meta.mode === "movie") publish("影评: ");
-              else if (meta.mode === "food") publish("美食: ");
-              else if (meta.mode === "travel") publish("游记: ");
-              else if (meta.mode === "swap") publish("技能: ");
-              else if (meta.mode === "trade") publish("闲置: ");
-              else if (meta.mode === "event") publish("活动: ");
-              else if (meta.mode === "confession") publish("表白: ");
-              else if (meta.mode === "wish") publish("愿望: ");
-              else if (meta.mode === "daily") publish("今日图: ");
-              else if (meta.mode === "voice") publish("语音房间: ");
-              else if (meta.mode === "docs") publish("文档更新: ");
-              else publish("");
+              if (meta.mode === "treehole") addPost("树洞: ");
+              else if (meta.mode === "qa") addPost("问题: ");
+              else if (meta.mode === "blog") addPost("博客: ");
+              else if (meta.mode === "photo") addPost("图片: ");
+              else if (meta.mode === "video") addPost("视频: ");
+              else if (meta.mode === "music") addPost("音乐: ");
+              else if (meta.mode === "book") addPost("书评: ");
+              else if (meta.mode === "movie") addPost("影评: ");
+              else if (meta.mode === "food") addPost("美食: ");
+              else if (meta.mode === "travel") addPost("旅行: ");
+              else if (meta.mode === "skill") addPost("技能: ");
+              else if (meta.mode === "second") addPost("闲置: ");
+              else if (meta.mode === "event") addPost("活动: ");
+              else if (meta.mode === "confession") addPost("表白: ");
+              else if (meta.mode === "wish") addPost("愿望: ");
+              else if (meta.mode === "daily") addPost("每日: ");
+              else if (meta.mode === "voice") addPost("语音房: ");
+              else if (meta.mode === "docs") addPost("协作: ");
+              else addPost("消息: ");
             }}
             className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
           >发布</button>
+          <button type="button" onClick={exportPosts} className="rounded-full border border-slate-300 px-4 py-2 text-xs">导出帖子</button>
+        </div>
+        {validation ? <p className="text-xs text-rose-600">{validation}</p> : null}
+
+        <div className="grid gap-2 text-sm text-slate-700 sm:grid-cols-3">
+          <div className="rounded-xl bg-slate-50 p-2">点赞: {state.likes}</div>
+          <div className="rounded-xl bg-slate-50 p-2">举报: {state.reportCount}</div>
+          <div className="rounded-xl bg-slate-50 p-2">支持: {state.supportCount}</div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={() => mutate({ likes: state.likes + 1 })} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">点赞 +1</button>
+          <button type="button" onClick={() => mutate({ reportCount: state.reportCount + 1 })} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">举报 +1</button>
+          <button type="button" onClick={() => mutate({ supportCount: state.supportCount + 1 })} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">支持 +1</button>
         </div>
 
-        {meta.mode === "chat" ? (
-          <div className="space-y-1 text-sm text-slate-700">
-            <p>兴趣匹配度: {matchScore}% · 当前话题: {topic}</p>
-            <button type="button" onClick={() => setReportCount((value) => value + 1)} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">举报不当内容</button>
-            <p>累计举报: {reportCount}</p>
+        {(meta.mode === "treehole" || meta.mode === "confession") ? (
+          <div className="space-y-2 rounded-2xl bg-emerald-50 p-3 text-sm text-emerald-800">
+            <input
+              value={state.moodTag}
+              onChange={(event) => mutate({ moodTag: event.target.value.slice(0, 24) })}
+              placeholder="情绪标签"
+              className="w-full rounded-xl border border-emerald-200 bg-white px-3 py-2 text-sm"
+            />
+            <p>情绪提示: {moodHint(state.moodTag)}</p>
           </div>
         ) : null}
 
-        {meta.mode === "tree" ? <p className="text-sm text-slate-700">情绪分析: {negativeHint} · 咨询入口: 可联系志愿者（演示）</p> : null}
-        {meta.mode === "qa" ? <p className="text-sm text-slate-700">支持采纳答案、点赞评论，积分 +5 / 次回答（演示）</p> : null}
-        {meta.mode === "blog" ? <p className="text-sm text-slate-700">RSS 订阅地址: /feed.xml · 专栏归档按标签聚合（演示）</p> : null}
-        {meta.mode === "photo" ? <p className="text-sm text-slate-700">支持滤镜标签与照片故事串联（演示）</p> : null}
-        {meta.mode === "video" ? <p className="text-sm text-slate-700">视频编辑: 剪辑 + 特效 + 话题挑战（演示）</p> : null}
-        {meta.mode === "music" ? <p className="text-sm text-slate-700">歌词同步开关 + 基于兴趣推荐歌单（演示）</p> : null}
-        {meta.mode === "book" ? <p className="text-sm text-slate-700">书评评分 + 阅读进度同步 + 主题书单（演示）</p> : null}
-        {meta.mode === "movie" ? <p className="text-sm text-slate-700">观影记录 + 影评评分 + 影单收藏（演示）</p> : null}
-        {meta.mode === "food" ? <p className="text-sm text-slate-700">地图定位: 附近美食推荐（演示）</p> : null}
-        {meta.mode === "travel" ? <p className="text-sm text-slate-700">行程规划: 3 天路线模板 + 足迹地图（演示）</p> : null}
-        {meta.mode === "swap" ? <p className="text-sm text-slate-700">技能匹配度: {matchScore}% · 可发起线上教学约课（演示）</p> : null}
-        {meta.mode === "trade" ? <p className="text-sm text-slate-700">信用分: 4.8/5 · 支持同城面交标签（演示）</p> : null}
-        {meta.mode === "event" ? <p className="text-sm text-slate-700">活动提醒: 自动提前 1 小时通知 · 支持签到码（演示）</p> : null}
-
-        {meta.mode === "poll" ? (
-          <div className="space-y-2 text-sm text-slate-700">
-            <div className="flex gap-2">
-              <input value={options[0]} onChange={(event) => setOptions((current) => [event.target.value, current[1]])} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm" />
-              <input value={options[1]} onChange={(event) => setOptions((current) => [current[0], event.target.value])} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm" />
-            </div>
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setVotes((current) => [current[0] + 1, current[1]])} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">投 {options[0]}</button>
-              <button type="button" onClick={() => setVotes((current) => [current[0], current[1] + 1])} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">投 {options[1]}</button>
-            </div>
-            <p>结果: {options[0]} {votes[0]} 票, {options[1]} {votes[1]} 票</p>
-            <p className="text-xs text-slate-500">题型扩展: 单选 / 多选 / 填空（演示）</p>
+        {(meta.mode === "poll" || meta.mode === "event") ? (
+          <div className="space-y-3 rounded-2xl border border-slate-200 p-3">
+            <p className="text-sm font-semibold text-slate-800">投票结果（实时）</p>
+            {([
+              ["A", state.votes.optionA, "optionA"],
+              ["B", state.votes.optionB, "optionB"],
+              ["C", state.votes.optionC, "optionC"],
+            ] as const).map(([label, count, key]) => {
+              const ratio = voteTotal === 0 ? 0 : Math.round((count / voteTotal) * 100);
+              return (
+                <div key={key} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs text-slate-600"><span>选项 {label}</span><span>{count} 票 / {ratio}%</span></div>
+                  <div className="h-2 rounded bg-slate-100"><div className="h-2 rounded bg-emerald-500" style={{ width: `${ratio}%` }} /></div>
+                  <button type="button" onClick={() => vote(key)} className="rounded-full border border-slate-300 px-3 py-1 text-xs">投 {label}</button>
+                </div>
+              );
+            })}
+            <button type="button" onClick={exportPollCsv} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">导出投票 CSV</button>
           </div>
         ) : null}
 
-        {meta.mode === "confession" ? <p className="text-sm text-slate-700">表白成功率: 62%（模拟） · 支持被表白者回应（演示）</p> : null}
-
-        {meta.mode === "wish" ? (
-          <div className="space-y-1 text-sm text-slate-700">
-            <button type="button" onClick={() => setSupportCount((value) => value + 1)} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">众筹支持 +1</button>
-            <p>当前支持人数: {supportCount}</p>
+        {meta.mode === "voice" ? (
+          <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-700">
+            <p>语音房状态: {state.voiceRoomOn ? "进行中" : "未开启"}</p>
+            <button type="button" onClick={() => mutate({ voiceRoomOn: !state.voiceRoomOn })} className="mt-2 rounded-full border border-slate-300 px-4 py-1.5 text-xs">{state.voiceRoomOn ? "关闭房间" : "开启房间"}</button>
           </div>
         ) : null}
-
-        {meta.mode === "daily" ? <p className="text-sm text-slate-700">图片日历: 最近 7 天均可回看（演示）</p> : null}
-        {meta.mode === "voice" ? <p className="text-sm text-slate-700">房间主题: {topic} · 支持录音回放（演示）</p> : null}
 
         {meta.mode === "docs" ? (
-          <div className="space-y-2 text-sm text-slate-700">
-            <select value={docPermission} onChange={(event) => setDocPermission(event.target.value)} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
-              <option>可编辑</option><option>仅评论</option><option>仅查看</option>
-            </select>
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setDocVersion((value) => value + 1)} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">创建新版本</button>
-              <button type="button" onClick={() => publish("模板: ")} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">插入模板</button>
+          <div className="space-y-2 rounded-2xl border border-slate-200 p-3 text-sm text-slate-700">
+            <input
+              value={state.doc.title}
+              onChange={(event) => mutate({ doc: { ...state.doc, title: event.target.value.slice(0, 80) } })}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
+            />
+            <textarea
+              rows={6}
+              value={state.doc.text}
+              onChange={(event) => mutate({ doc: { ...state.doc, text: event.target.value.slice(0, 3000) } })}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
+            />
+            <div className="grid gap-2 sm:grid-cols-2">
+              <select
+                value={state.doc.permission}
+                onChange={(event) => mutate({ doc: { ...state.doc, permission: event.target.value as DocState["permission"] } })}
+                className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
+              >
+                <option value="owner">owner</option>
+                <option value="editor">editor</option>
+                <option value="viewer">viewer</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => mutate({ doc: { ...state.doc, version: state.doc.version + 1 } })}
+                className="rounded-full border border-slate-300 px-4 py-2 text-xs"
+              >保存新版本</button>
             </div>
-            <p>权限: {docPermission} · 版本: v{docVersion}</p>
+            <p>当前版本: v{state.doc.version} · 权限: {state.doc.permission}</p>
+            <button type="button" onClick={exportDoc} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs">导出文档 CSV</button>
           </div>
         ) : null}
       </article>
 
       <article className="rounded-3xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-3 text-base font-bold text-slate-900">动态列表</h3>
+        <h3 className="mb-3 text-base font-bold text-slate-900">最近动态</h3>
         <ul className="space-y-2 text-sm text-slate-700">
-          {posts.map((item, index) => (
-            <li key={`${item}-${index}`} className="rounded-xl bg-slate-50 p-2">{item}</li>
+          {state.posts.map((post, index) => (
+            <li key={`${post}-${index}`} className="rounded-xl bg-slate-50 p-2">{post}</li>
           ))}
-          {posts.length === 0 ? <li className="text-slate-400">暂无内容</li> : null}
+          {state.posts.length === 0 ? <li className="text-slate-400">暂无动态</li> : null}
         </ul>
       </article>
     </section>
